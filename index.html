@@ -3,11 +3,13 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>JojiTrade</title>
 
-<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
+<title>R6 Pro Stats</title>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <style>
+
 * {
     box-sizing: border-box;
     margin: 0;
@@ -15,700 +17,1203 @@
 }
 
 body {
-    background: #0b0e11;
-    color: #e8eaed;
     font-family: Arial, Helvetica, sans-serif;
-    overflow: hidden;
+    background: #080a0d;
+    color: #f1f1f1;
 }
 
 /* HEADER */
 
-.header {
-    height: 60px;
-    background: #11151a;
-    border-bottom: 1px solid #252a31;
+header {
+    height: 70px;
+    background: #11151b;
+    border-bottom: 1px solid #292e36;
+
     display: flex;
     align-items: center;
-    padding: 0 18px;
-    gap: 25px;
+
+    padding: 0 30px;
+    gap: 30px;
 }
 
 .logo {
-    font-size: 22px;
-    font-weight: bold;
-    color: #fff;
+    font-size: 25px;
+    font-weight: 900;
+    letter-spacing: 1px;
 }
 
 .logo span {
-    color: #22c55e;
+    color: #f0b90b;
 }
 
 .search {
+    width: 300px;
+
     background: #1a1f26;
-    border: 1px solid #303640;
-    border-radius: 7px;
-    padding: 10px 14px;
-    width: 230px;
+    border: 1px solid #343a44;
+
+    padding: 12px 15px;
+
+    border-radius: 6px;
+
     color: white;
     outline: none;
 }
 
-.header-buttons {
-    margin-left: auto;
-    display: flex;
-    gap: 10px;
+.search:focus {
+    border-color: #f0b90b;
 }
 
-.header-btn {
+.header-right {
+    margin-left: auto;
+    color: #888;
+}
+
+/* NAV */
+
+nav {
+    background: #0e1217;
+
+    padding: 15px 30px;
+
+    display: flex;
+    gap: 10px;
+
+    border-bottom: 1px solid #292e36;
+}
+
+.nav-btn {
     background: #1a1f26;
-    border: 1px solid #303640;
-    color: #ddd;
-    padding: 9px 14px;
-    border-radius: 6px;
+
+    border: none;
+
+    color: #aaa;
+
+    padding: 10px 18px;
+
+    border-radius: 5px;
+
     cursor: pointer;
 }
 
-.header-btn:hover {
-    background: #252b33;
+.nav-btn:hover,
+.nav-btn.active {
+    background: #f0b90b;
+    color: #000;
 }
 
 /* MAIN */
 
-.main {
+.container {
+    padding: 25px;
+    max-width: 1500px;
+    margin: auto;
+}
+
+/* TITLE */
+
+.page-title {
+    margin-bottom: 25px;
+}
+
+.page-title h1 {
+    font-size: 30px;
+}
+
+.page-title p {
+    color: #858b94;
+    margin-top: 8px;
+}
+
+/* STAT CARDS */
+
+.stats {
     display: grid;
-    grid-template-columns: 1fr 300px;
-    height: calc(100vh - 60px);
+
+    grid-template-columns:
+        repeat(4, 1fr);
+
+    gap: 15px;
+
+    margin-bottom: 25px;
 }
 
-/* CHART AREA */
+.card {
+    background: #11151b;
 
-.chart-area {
-    min-width: 0;
-    display: flex;
-    flex-direction: column;
+    border: 1px solid #292e36;
+
+    padding: 20px;
+
+    border-radius: 8px;
 }
 
-.symbol-bar {
-    height: 55px;
-    background: #11151a;
-    border-bottom: 1px solid #252a31;
-    display: flex;
-    align-items: center;
-    padding: 0 15px;
-    gap: 20px;
+.card-title {
+    color: #858b94;
+    font-size: 13px;
 }
 
-.symbol-name {
-    font-size: 19px;
+.card-value {
+    font-size: 28px;
     font-weight: bold;
+
+    margin-top: 10px;
 }
 
-.price {
-    font-size: 16px;
+.yellow {
+    color: #f0b90b;
 }
 
 .green {
-    color: #22c55e;
+    color: #32d583;
 }
 
 .red {
-    color: #ef4444;
+    color: #ff4d5a;
 }
 
-.timeframes {
-    display: flex;
-    gap: 4px;
-}
+/* CONTENT GRID */
 
-.timeframes button {
-    background: transparent;
-    border: none;
-    color: #9299a3;
-    padding: 7px 10px;
-    cursor: pointer;
-    border-radius: 5px;
-}
-
-.timeframes button:hover,
-.timeframes button.active {
-    background: #252b33;
-    color: white;
-}
-
-#chart {
-    flex: 1;
-    width: 100%;
-}
-
-/* RIGHT PANEL */
-
-.sidebar {
-    background: #11151a;
-    border-left: 1px solid #252a31;
-    display: flex;
-    flex-direction: column;
-}
-
-.panel-title {
-    padding: 17px;
-    border-bottom: 1px solid #252a31;
-    font-weight: bold;
-}
-
-.watchlist {
-    overflow-y: auto;
-}
-
-.stock {
-    display: flex;
-    justify-content: space-between;
-    padding: 14px 16px;
-    border-bottom: 1px solid #1e2329;
-    cursor: pointer;
-}
-
-.stock:hover {
-    background: #1b2026;
-}
-
-.stock-left strong {
-    display: block;
-    margin-bottom: 5px;
-}
-
-.stock-left small {
-    color: #777f8a;
-}
-
-.stock-right {
-    text-align: right;
-}
-
-.stock-price {
-    font-weight: bold;
-    margin-bottom: 5px;
-}
-
-/* ORDER PANEL */
-
-.order-panel {
-    margin-top: auto;
-    border-top: 1px solid #252a31;
-    padding: 16px;
-}
-
-.order-title {
-    font-size: 16px;
-    margin-bottom: 14px;
-    font-weight: bold;
-}
-
-.order-input {
-    width: 100%;
-    background: #1a1f26;
-    border: 1px solid #303640;
-    color: white;
-    padding: 11px;
-    border-radius: 6px;
-    margin-bottom: 10px;
-    outline: none;
-}
-
-.order-buttons {
+.grid {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 8px;
+
+    grid-template-columns:
+        2fr 1fr;
+
+    gap: 20px;
 }
 
-.buy {
-    background: #16a34a;
+/* PANELS */
+
+.panel {
+    background: #11151b;
+
+    border: 1px solid #292e36;
+
+    border-radius: 8px;
+
+    overflow: hidden;
 }
 
-.sell {
-    background: #dc2626;
-}
+.panel-header {
+    padding: 18px;
 
-.trade-btn {
-    border: none;
-    color: white;
-    padding: 12px;
-    border-radius: 6px;
+    border-bottom: 1px solid #292e36;
+
+    font-size: 17px;
     font-weight: bold;
+}
+
+.chart-container {
+    padding: 20px;
+
+    height: 350px;
+}
+
+/* OPERATOR TABLE */
+
+.table-container {
+    overflow-x: auto;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+
+    color: #777f89;
+
+    font-size: 12px;
+
+    padding: 14px;
+
+    background: #0d1014;
+}
+
+td {
+    padding: 15px 14px;
+
+    border-top: 1px solid #20252c;
+
+    font-size: 14px;
+}
+
+tr:hover {
+    background: #171c22;
+}
+
+.operator {
+    font-weight: bold;
+}
+
+.role {
+    font-size: 12px;
+    color: #777f89;
+    margin-top: 4px;
+}
+
+.pick {
+    color: #f0b90b;
+    font-weight: bold;
+}
+
+/* OPERATOR LIST */
+
+.operator-list {
+    padding: 10px 0;
+}
+
+.operator-item {
+    display: flex;
+
+    align-items: center;
+
+    justify-content: space-between;
+
+    padding: 15px 18px;
+
+    border-bottom: 1px solid #20252c;
+}
+
+.operator-item:last-child {
+    border-bottom: none;
+}
+
+.operator-name {
+    font-weight: bold;
+}
+
+.operator-role {
+    color: #777f89;
+
+    font-size: 12px;
+
+    margin-top: 4px;
+}
+
+.percent {
+    color: #f0b90b;
+
+    font-weight: bold;
+}
+
+/* FILTER */
+
+.filter {
+    display: flex;
+
+    gap: 10px;
+
+    margin-bottom: 15px;
+}
+
+.filter button {
+    background: #1a1f26;
+
+    color: #aaa;
+
+    border: 1px solid #303640;
+
+    padding: 9px 15px;
+
+    border-radius: 5px;
+
     cursor: pointer;
 }
 
-.trade-btn:hover {
-    opacity: .85;
+.filter button:hover,
+.filter button.selected {
+    background: #f0b90b;
+    color: black;
 }
 
-/* BOTTOM BAR */
+/* FOOTER */
 
-.bottom {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    right: 300px;
-    height: 30px;
-    background: #11151a;
-    border-top: 1px solid #252a31;
-    color: #737b86;
-    font-size: 11px;
-    display: flex;
-    align-items: center;
-    padding-left: 15px;
+footer {
+    text-align: center;
+
+    color: #626a74;
+
+    padding: 30px;
+
+    font-size: 12px;
 }
 
 /* MOBILE */
 
-@media(max-width: 800px) {
+@media(max-width: 900px) {
 
-    body {
-        overflow: auto;
+    .stats {
+        grid-template-columns:
+            repeat(2, 1fr);
     }
 
-    .main {
+    .grid {
         grid-template-columns: 1fr;
-        height: auto;
     }
 
-    .sidebar {
-        border-left: none;
-        border-top: 1px solid #252a31;
-    }
-
-    #chart {
-        height: 500px;
-        min-height: 500px;
-    }
-
-    .bottom {
-        display: none;
-    }
-
-    .header {
-        gap: 10px;
+    header {
+        padding: 0 15px;
     }
 
     .search {
-        width: 150px;
+        width: 180px;
     }
 }
+
+@media(max-width: 600px) {
+
+    .stats {
+        grid-template-columns: 1fr;
+    }
+
+    .header-right {
+        display: none;
+    }
+
+    nav {
+        overflow-x: auto;
+    }
+
+    .container {
+        padding: 15px;
+    }
+}
+
 </style>
 </head>
 
 <body>
 
-<header class="header">
+
+<header>
 
     <div class="logo">
-        Joji<span>Trade</span>
+        R6<span>PRO</span>
     </div>
 
     <input
-        class="search"
         id="search"
-        placeholder="Search symbol..."
+        class="search"
+        placeholder="Search operator..."
+        onkeyup="searchOperators()"
     >
 
-    <div class="header-buttons">
-        <button class="header-btn">Alerts</button>
-        <button class="header-btn">Settings</button>
+    <div class="header-right">
+        PRO LEAGUE STATS
     </div>
 
 </header>
 
-<div class="main">
 
-    <section class="chart-area">
+<nav>
 
-        <div class="symbol-bar">
+    <button
+        class="nav-btn active"
+        onclick="filterOperators('all', this)">
+        All
+    </button>
 
-            <div class="symbol-name" id="symbolName">
-                BTC/USD
-            </div>
+    <button
+        class="nav-btn"
+        onclick="filterOperators('attacker', this)">
+        Attackers
+    </button>
 
-            <div class="price">
-                $<span id="currentPrice">67,420.21</span>
-                <span id="change" class="green">+1.42%</span>
-            </div>
+    <button
+        class="nav-btn"
+        onclick="filterOperators('defender', this)">
+        Defenders
+    </button>
 
-            <div class="timeframes">
-                <button>1m</button>
-                <button>5m</button>
-                <button class="active">15m</button>
-                <button>1H</button>
-                <button>4H</button>
-                <button>1D</button>
-            </div>
-
-        </div>
-
-        <div id="chart"></div>
-
-    </section>
+</nav>
 
 
-    <aside class="sidebar">
-
-        <div class="panel-title">
-            Watchlist
-        </div>
-
-        <div class="watchlist">
-
-            <div class="stock" onclick="selectStock('BTC/USD',67420.21)">
-                <div class="stock-left">
-                    <strong>BTC/USD</strong>
-                    <small>Bitcoin</small>
-                </div>
-
-                <div class="stock-right">
-                    <div class="stock-price">$67,420</div>
-                    <div class="green">+1.42%</div>
-                </div>
-            </div>
+<main class="container">
 
 
-            <div class="stock" onclick="selectStock('NKE',78.42)">
-                <div class="stock-left">
-                    <strong>NKE</strong>
-                    <small>Nike</small>
-                </div>
+<div class="page-title">
 
-                <div class="stock-right">
-                    <div class="stock-price">$78.42</div>
-                    <div class="red">-0.84%</div>
-                </div>
-            </div>
+    <h1>Rainbow Six Siege Pro Stats</h1>
 
-
-            <div class="stock" onclick="selectStock('AAPL',228.32)">
-                <div class="stock-left">
-                    <strong>AAPL</strong>
-                    <small>Apple</small>
-                </div>
-
-                <div class="stock-right">
-                    <div class="stock-price">$228.32</div>
-                    <div class="green">+0.71%</div>
-                </div>
-            </div>
-
-
-            <div class="stock" onclick="selectStock('TSLA',312.15)">
-                <div class="stock-left">
-                    <strong>TSLA</strong>
-                    <small>Tesla</small>
-                </div>
-
-                <div class="stock-right">
-                    <div class="stock-price">$312.15</div>
-                    <div class="green">+2.31%</div>
-                </div>
-            </div>
-
-
-            <div class="stock" onclick="selectStock('NVDA',176.83)">
-                <div class="stock-left">
-                    <strong>NVDA</strong>
-                    <small>NVIDIA</small>
-                </div>
-
-                <div class="stock-right">
-                    <div class="stock-price">$176.83</div>
-                    <div class="green">+1.95%</div>
-                </div>
-            </div>
-
-        </div>
-
-
-        <div class="order-panel">
-
-            <div class="order-title">
-                Paper Trading
-            </div>
-
-            <input
-                class="order-input"
-                type="number"
-                id="quantity"
-                value="1"
-                min="1"
-                placeholder="Quantity"
-            >
-
-            <input
-                class="order-input"
-                type="number"
-                id="limitPrice"
-                placeholder="Limit Price"
-            >
-
-            <div class="order-buttons">
-
-                <button
-                    class="trade-btn buy"
-                    onclick="trade('BUY')">
-                    BUY
-                </button>
-
-                <button
-                    class="trade-btn sell"
-                    onclick="trade('SELL')">
-                    SELL
-                </button>
-
-            </div>
-
-        </div>
-
-    </aside>
+    <p>
+        Operator popularity, pick rates, bans and competitive statistics.
+    </p>
 
 </div>
 
 
-<div class="bottom">
-    Market data is simulated for demonstration purposes • Paper trading only
+<!-- TOP STATS -->
+
+<section class="stats">
+
+    <div class="card">
+
+        <div class="card-title">
+            MOST PICKED OPERATOR
+        </div>
+
+        <div
+            class="card-value yellow">
+            Smoke
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            HIGHEST PICK RATE
+        </div>
+
+        <div
+            class="card-value">
+            42.8%
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            MOST BANNED
+        </div>
+
+        <div
+            class="card-value red">
+            Fenrir
+        </div>
+
+    </div>
+
+
+    <div class="card">
+
+        <div class="card-title">
+            PRO MATCHES
+        </div>
+
+        <div
+            class="card-value green">
+            12,482
+        </div>
+
+    </div>
+
+</section>
+
+
+<div class="grid">
+
+
+<!-- LEFT SIDE -->
+
+<div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+        Operator Statistics
+    </div>
+
+
+    <div style="padding:15px">
+
+        <div class="filter">
+
+            <button
+                class="selected"
+                onclick="filterOperators('all', this)">
+                All
+            </button>
+
+            <button
+                onclick="filterOperators('attacker', this)">
+                Attack
+            </button>
+
+            <button
+                onclick="filterOperators('defender', this)">
+                Defense
+            </button>
+
+        </div>
+
+    </div>
+
+
+    <div class="table-container">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>OPERATOR</th>
+                    <th>ROLE</th>
+                    <th>PICK RATE</th>
+                    <th>BAN RATE</th>
+                    <th>WIN RATE</th>
+                    <th>K/D</th>
+
+                </tr>
+
+            </thead>
+
+
+            <tbody id="operatorTable">
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Smoke
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">42.8%</td>
+
+<td>18.2%</td>
+
+<td class="green">51.7%</td>
+
+<td>1.14</td>
+
+</tr>
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Azami
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">39.4%</td>
+
+<td>31.5%</td>
+
+<td class="green">52.1%</td>
+
+<td>1.09</td>
+
+</tr>
+
+
+<tr data-role="attacker">
+
+<td>
+    <div class="operator">
+        Ace
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Attacker
+    </div>
+</td>
+
+<td class="pick">37.9%</td>
+
+<td>24.8%</td>
+
+<td class="green">51.3%</td>
+
+<td>1.07</td>
+
+</tr>
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Wamai
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">35.6%</td>
+
+<td>20.1%</td>
+
+<td>50.8%</td>
+
+<td>1.05</td>
+
+</tr>
+
+
+<tr data-role="attacker">
+
+<td>
+    <div class="operator">
+        Twitch
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Attacker
+    </div>
+</td>
+
+<td class="pick">33.4%</td>
+
+<td>15.2%</td>
+
+<td class="green">52.4%</td>
+
+<td>1.12</td>
+
+</tr>
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Mute
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">31.8%</td>
+
+<td>17.6%</td>
+
+<td>50.5%</td>
+
+<td>1.02</td>
+
+</tr>
+
+
+<tr data-role="attacker">
+
+<td>
+    <div class="operator">
+        Dokkaebi
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Attacker
+    </div>
+</td>
+
+<td class="pick">29.7%</td>
+
+<td>22.3%</td>
+
+<td>51.1%</td>
+
+<td>1.08</td>
+
+</tr>
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Warden
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">28.4%</td>
+
+<td>26.7%</td>
+
+<td>49.8%</td>
+
+<td>1.01</td>
+
+</tr>
+
+
+<tr data-role="attacker">
+
+<td>
+    <div class="operator">
+        Buck
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Attacker
+    </div>
+</td>
+
+<td class="pick">27.2%</td>
+
+<td>12.4%</td>
+
+<td class="green">52.0%</td>
+
+<td>1.10</td>
+
+</tr>
+
+
+<tr data-role="defender">
+
+<td>
+    <div class="operator">
+        Goyo
+    </div>
+</td>
+
+<td>
+    <div class="role">
+        Defender
+    </div>
+</td>
+
+<td class="pick">25.9%</td>
+
+<td>19.8%</td>
+
+<td>50.2%</td>
+
+<td>1.03</td>
+
+</tr>
+
+
+            </tbody>
+
+        </table>
+
+    </div>
+
 </div>
+
+
+<!-- CHART -->
+
+<div
+    class="panel"
+    style="margin-top:20px">
+
+    <div class="panel-header">
+        Operator Pick Rate
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="pickChart"></canvas>
+
+    </div>
+
+</div>
+
+
+</div>
+
+
+<!-- RIGHT SIDE -->
+
+<div>
+
+
+<div class="panel">
+
+    <div class="panel-header">
+        Popular Operators
+    </div>
+
+
+    <div class="operator-list">
+
+
+        <div class="operator-item">
+
+            <div>
+                <div class="operator-name">
+                    Smoke
+                </div>
+
+                <div class="operator-role">
+                    Defender
+                </div>
+            </div>
+
+            <div class="percent">
+                42.8%
+            </div>
+
+        </div>
+
+
+        <div class="operator-item">
+
+            <div>
+                <div class="operator-name">
+                    Azami
+                </div>
+
+                <div class="operator-role">
+                    Defender
+                </div>
+            </div>
+
+            <div class="percent">
+                39.4%
+            </div>
+
+        </div>
+
+
+        <div class="operator-item">
+
+            <div>
+                <div class="operator-name">
+                    Ace
+                </div>
+
+                <div class="operator-role">
+                    Attacker
+                </div>
+            </div>
+
+            <div class="percent">
+                37.9%
+            </div>
+
+        </div>
+
+
+        <div class="operator-item">
+
+            <div>
+                <div class="operator-name">
+                    Wamai
+                </div>
+
+                <div class="operator-role">
+                    Defender
+                </div>
+            </div>
+
+            <div class="percent">
+                35.6%
+            </div>
+
+        </div>
+
+
+        <div class="operator-item">
+
+            <div>
+                <div class="operator-name">
+                    Twitch
+                </div>
+
+                <div class="operator-role">
+                    Attacker
+                </div>
+            </div>
+
+            <div class="percent">
+                33.4%
+            </div>
+
+        </div>
+
+
+    </div>
+
+</div>
+
+
+<div
+    class="panel"
+    style="margin-top:20px">
+
+    <div class="panel-header">
+        Attack vs Defense
+    </div>
+
+    <div class="chart-container">
+
+        <canvas id="roleChart"></canvas>
+
+    </div>
+
+</div>
+
+
+</div>
+
+</div>
+
+
+</main>
+
+
+<footer>
+
+    R6 Pro Stats Dashboard • Sample data for demonstration
+
+</footer>
 
 
 <script>
 
 /* =========================
-   CHART
+   PICK RATE CHART
 ========================= */
 
-const chart = LightweightCharts.createChart(
-    document.getElementById("chart"),
+const pickChart =
+new Chart(
+    document.getElementById("pickChart"),
     {
-        layout: {
-            background: {
-                color: "#0b0e11"
-            },
-            textColor: "#8b949e"
+
+        type: "bar",
+
+        data: {
+
+            labels: [
+                "Smoke",
+                "Azami",
+                "Ace",
+                "Wamai",
+                "Twitch",
+                "Mute",
+                "Dokkaebi",
+                "Warden",
+                "Buck",
+                "Goyo"
+            ],
+
+            datasets: [{
+
+                label: "Pick Rate %",
+
+                data: [
+                    42.8,
+                    39.4,
+                    37.9,
+                    35.6,
+                    33.4,
+                    31.8,
+                    29.7,
+                    28.4,
+                    27.2,
+                    25.9
+                ]
+
+            }]
+
         },
 
-        grid: {
-            vertLines: {
-                color: "#171b20"
+        options: {
+
+            responsive: true,
+
+            maintainAspectRatio: false,
+
+            plugins: {
+
+                legend: {
+                    display: false
+                }
+
             },
-            horzLines: {
-                color: "#171b20"
+
+            scales: {
+
+                y: {
+
+                    beginAtZero: true,
+
+                    ticks: {
+                        color: "#858b94"
+                    },
+
+                    grid: {
+                        color: "#22272e"
+                    }
+
+                },
+
+                x: {
+
+                    ticks: {
+                        color: "#858b94"
+                    },
+
+                    grid: {
+                        display: false
+                    }
+
+                }
+
             }
-        },
 
-        crosshair: {
-            mode: LightweightCharts.CrosshairMode.Normal
-        },
-
-        rightPriceScale: {
-            borderColor: "#252a31"
-        },
-
-        timeScale: {
-            borderColor: "#252a31",
-            timeVisible: true
         }
+
     }
 );
 
 
-const candleSeries = chart.addCandlestickSeries({
-
-    upColor: "#22c55e",
-    downColor: "#ef4444",
-
-    borderUpColor: "#22c55e",
-    borderDownColor: "#ef4444",
-
-    wickUpColor: "#22c55e",
-    wickDownColor: "#ef4444"
-
-});
-
-
 /* =========================
-   GENERATE DEMO DATA
+   ATTACK / DEFENSE CHART
 ========================= */
 
-let candles = [];
+new Chart(
 
-let startingPrice = 67420;
+    document.getElementById("roleChart"),
 
-let now = Math.floor(Date.now() / 1000);
+    {
 
-for(let i = 150; i >= 0; i--) {
+        type: "doughnut",
 
-    let time = now - i * 900;
+        data: {
 
-    let open = startingPrice;
+            labels: [
+                "Attackers",
+                "Defenders"
+            ],
 
-    let movement =
-        (Math.random() - 0.47) * 900;
+            datasets: [{
 
-    let close = open + movement;
+                data: [
+                    48,
+                    52
+                ]
 
-    let high =
-        Math.max(open, close)
-        + Math.random() * 500;
+            }]
 
-    let low =
-        Math.min(open, close)
-        - Math.random() * 500;
+        },
 
-    candles.push({
+        options: {
 
-        time: time,
+            responsive: true,
 
-        open: Number(open.toFixed(2)),
+            maintainAspectRatio: false,
 
-        high: Number(high.toFixed(2)),
+            plugins: {
 
-        low: Number(low.toFixed(2)),
+                legend: {
 
-        close: Number(close.toFixed(2))
+                    position: "bottom",
 
-    });
+                    labels: {
+                        color: "#aaa"
+                    }
 
-    startingPrice = close;
-}
+                }
 
-
-candleSeries.setData(candles);
-
-chart.timeScale().fitContent();
-
-
-/* =========================
-   RESIZE CHART
-========================= */
-
-window.addEventListener("resize", () => {
-
-    chart.applyOptions({
-
-        width:
-            document.getElementById("chart").clientWidth,
-
-        height:
-            document.getElementById("chart").clientHeight
-
-    });
-
-});
-
-
-/* =========================
-   STOCK SELECTION
-========================= */
-
-function selectStock(symbol, price) {
-
-    document.getElementById("symbolName")
-        .textContent = symbol;
-
-    document.getElementById("currentPrice")
-        .textContent =
-        price.toLocaleString(
-            undefined,
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
             }
+
+        }
+
+    }
+
+);
+
+
+/* =========================
+   FILTER OPERATORS
+========================= */
+
+function filterOperators(role, button) {
+
+    const rows =
+        document.querySelectorAll(
+            "#operatorTable tr"
         );
 
-    document.getElementById("limitPrice")
-        .value = price.toFixed(2);
+    rows.forEach(row => {
 
-    generateNewChart(price);
-}
+        if(role === "all") {
+
+            row.style.display = "";
+
+        }
+
+        else {
+
+            if(
+                row.dataset.role === role
+            ) {
+
+                row.style.display = "";
+
+            } else {
+
+                row.style.display = "none";
+
+            }
+
+        }
+
+    });
 
 
-/* =========================
-   NEW CHART
-========================= */
+    document
+        .querySelectorAll(
+            ".filter button"
+        )
+        .forEach(btn => {
 
-function generateNewChart(basePrice) {
-
-    let data = [];
-
-    let current = basePrice;
-
-    let now = Math.floor(Date.now() / 1000);
-
-    for(let i = 150; i >= 0; i--) {
-
-        let open = current;
-
-        let movement =
-            (Math.random() - 0.48)
-            * basePrice * 0.015;
-
-        let close = open + movement;
-
-        let high =
-            Math.max(open, close)
-            + Math.random()
-            * basePrice * 0.008;
-
-        let low =
-            Math.min(open, close)
-            - Math.random()
-            * basePrice * 0.008;
-
-        data.push({
-
-            time: now - i * 900,
-
-            open: Number(open.toFixed(2)),
-
-            high: Number(high.toFixed(2)),
-
-            low: Number(low.toFixed(2)),
-
-            close: Number(close.toFixed(2))
+            btn.classList.remove(
+                "selected"
+            );
 
         });
 
-        current = close;
+
+    if(button) {
+
+        button.classList.add(
+            "selected"
+        );
+
     }
 
-    candleSeries.setData(data);
-
-    chart.timeScale().fitContent();
-}
-
-
-/* =========================
-   PAPER TRADING
-========================= */
-
-function trade(type) {
-
-    const symbol =
-        document.getElementById("symbolName").textContent;
-
-    const quantity =
-        document.getElementById("quantity").value;
-
-    const price =
-        document.getElementById("limitPrice").value;
-
-    if(!quantity || !price) {
-
-        alert("Enter a quantity and price.");
-
-        return;
-    }
-
-    alert(
-        type +
-        " ORDER\n\n" +
-        "Symbol: " + symbol +
-        "\nQuantity: " + quantity +
-        "\nPrice: $" + price
-    );
 }
 
 
@@ -716,79 +1221,42 @@ function trade(type) {
    SEARCH
 ========================= */
 
-document.getElementById("search")
-.addEventListener("keydown", function(event) {
+function searchOperators() {
 
-    if(event.key !== "Enter") return;
+    const search =
+        document
+        .getElementById("search")
+        .value
+        .toLowerCase();
 
-    let symbol = this.value
-        .trim()
-        .toUpperCase();
-
-    const stocks = {
-
-        "BTC": ["BTC/USD", 67420.21],
-
-        "BTCUSD": ["BTC/USD", 67420.21],
-
-        "NKE": ["NKE", 78.42],
-
-        "AAPL": ["AAPL", 228.32],
-
-        "TSLA": ["TSLA", 312.15],
-
-        "NVDA": ["NVDA", 176.83]
-
-    };
-
-    if(stocks[symbol]) {
-
-        selectStock(
-            stocks[symbol][0],
-            stocks[symbol][1]
+    const rows =
+        document.querySelectorAll(
+            "#operatorTable tr"
         );
 
-    } else {
+    rows.forEach(row => {
 
-        alert(
-            "Symbol not found in demo watchlist."
-        );
+        const name =
+            row
+            .querySelector(".operator")
+            .textContent
+            .toLowerCase();
 
-    }
+        if(
+            name.includes(search)
+        ) {
 
-});
+            row.style.display = "";
 
+        } else {
 
-/* =========================
-   SIMULATED LIVE PRICE
-========================= */
+            row.style.display = "none";
 
-setInterval(() => {
+        }
 
-    const priceElement =
-        document.getElementById("currentPrice");
+    });
 
-    let price =
-        parseFloat(
-            priceElement.textContent
-                .replace(/,/g, "")
-        );
-
-    let movement =
-        (Math.random() - 0.5) * 40;
-
-    price += movement;
-
-    priceElement.textContent =
-        price.toLocaleString(
-            undefined,
-            {
-                minimumFractionDigits: 2,
-                maximumFractionDigits: 2
-            }
-        );
-
-}, 3000);
+}
 
 </script>
 
