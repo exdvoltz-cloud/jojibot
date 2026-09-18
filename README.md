@@ -1,1 +1,1 @@
-# jojibot
+# landon trading bot
