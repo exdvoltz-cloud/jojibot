@@ -9,177 +9,114 @@
         box-sizing: border-box;
         margin: 0;
         padding: 0;
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Arial, sans-serif;
     }
     body {
-        background: #0b0f14;
+        background: #101217;
         color: white;
     }
     header {
-        background: linear-gradient(135deg, #111923, #182432);
-        padding: 35px 20px;
+        background: #191c24;
+        padding: 25px;
         text-align: center;
-        border-bottom: 2px solid #2d3947;
+        border-bottom: 2px solid #f5c542;
     }
     header h1 {
-        font-size: 42px;
-        letter-spacing: 2px;
+        font-size: 32px;
+        color: #f5c542;
     }
     header p {
-        color: #9ba8b6;
-        margin-top: 10px;
-    }
-    .controls {
-        max-width: 1200px;
-        margin: 25px auto;
-        padding: 0 20px;
-    }
-    #search {
-        width: 100%;
-        padding: 16px;
-        border-radius: 8px;
-        border: 1px solid #344252;
-        background: #121922;
-        color: white;
-        font-size: 16px;
-        outline: none;
-    }
-    .filters {
-        display: flex;
-        gap: 10px;
-        flex-wrap: wrap;
-        margin-top: 15px;
-    }
-    button {
-        background: #182330;
-        color: white;
-        border: 1px solid #344252;
-        padding: 12px 18px;
-        border-radius: 7px;
-        cursor: pointer;
-        transition: .2s;
-    }
-    button:hover,
-    button.active {
-        background: #3c82f6;
-        border-color: #3c82f6;
-    }
-    .grid {
-        max-width: 1200px;
-        margin: auto;
-        padding: 10px 20px 50px;
-        display: grid;
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 18px;
-    }
-    .card {
-        background: #121922;
-        border: 1px solid #263341;
-        border-radius: 12px;
-        padding: 20px;
-        transition: .2s;
-    }
-    .card:hover {
-        transform: translateY(-4px);
-        border-color: #3c82f6;
-        box-shadow: 0 10px 30px rgba(0,0,0,.3);
-    }
-    .operator-name {
-        font-size: 25px;
-        font-weight: bold;
-        margin-bottom: 5px;
-    }
-    .side {
-        display: inline-block;
-        padding: 5px 9px;
-        border-radius: 5px;
-        font-size: 12px;
-        font-weight: bold;
-        margin: 7px 0 15px;
-    }
-    .attacker {
-        background: #693535;
-    }
-    .defender {
-        background: #31547a;
-    }
-    .section {
-        margin-top: 14px;
-    }
-    .section-title {
-        color: #7fa8dc;
-        font-size: 12px;
-        text-transform: uppercase;
-        letter-spacing: 1px;
-        margin-bottom: 5px;
-    }
-    .ability {
-        color: #fff;
-        font-weight: bold;
-    }
-    .description {
-        color: #aeb9c5;
-        line-height: 1.5;
-        font-size: 14px;
-    }
-    .tags {
-        display: flex;
-        flex-wrap: wrap;
-        gap: 5px;
+        color: #aaa;
         margin-top: 8px;
     }
-    .tag {
-        background: #202c38;
-        color: #b8c8d8;
+    .container {
+        max-width: 1200px;
+        margin: auto;
+        padding: 25px;
+    }
+    .controls {
+        display: flex;
+        gap: 12px;
+        flex-wrap: wrap;
+        margin-bottom: 25px;
+    }
+    select, input {
+        background: #1b1f28;
+        color: white;
+        border: 1px solid #3a3f4b;
+        padding: 13px;
+        border-radius: 7px;
+        font-size: 15px;
+    }
+    select {
+        min-width: 200px;
+    }
+    input {
+        flex: 1;
+        min-width: 200px;
+    }
+    .map-card {
+        background: #191c24;
+        border: 1px solid #303541;
+        border-radius: 12px;
+        padding: 22px;
+        margin-bottom: 25px;
+    }
+    .map-card h2 {
+        color: #f5c542;
+        margin-bottom: 8px;
+    }
+    .site {
+        background: #222631;
+        padding: 15px;
+        margin-top: 12px;
+        border-radius: 8px;
+    }
+    .site h3 {
+        margin-bottom: 8px;
+    }
+    .operators {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+        gap: 15px;
+        margin-top: 12px;
+    }
+    .operator {
+        background: #151820;
+        padding: 17px;
+        border-radius: 8px;
+        border-left: 4px solid #f5c542;
+    }
+    .operator h4 {
+        color: #f5c542;
+        font-size: 19px;
+        margin-bottom: 6px;
+    }
+    .operator p {
+        color: #bbb;
+        line-height: 1.4;
+        font-size: 14px;
+    }
+    .role {
+        display: inline-block;
+        background: #303541;
         padding: 5px 8px;
         border-radius: 5px;
-        font-size: 11px;
-    }
-    .stats {
-        display: flex;
-        gap: 15px;
-        margin-top: 15px;
-        border-top: 1px solid #263341;
-        padding-top: 12px;
-    }
-    .stat {
-        flex: 1;
-        text-align: center;
-    }
-    .stat-label {
-        display: block;
-        color: #7f8d9c;
-        font-size: 11px;
-        text-transform: uppercase;
-    }
-    .stat-value {
-        font-size: 16px;
-        font-weight: bold;
-        margin-top: 4px;
-    }
-    .gadget {
-        color: #d9e3ed;
-        font-size: 14px;
-        margin-top: 3px;
-    }
-    .empty {
-        text-align: center;
-        color: #8794a3;
-        padding: 60px 20px;
-        grid-column: 1 / -1;
+        font-size: 12px;
+        margin-top: 8px;
+        color: #ddd;
     }
     footer {
         text-align: center;
         padding: 30px;
-        color: #687686;
-        border-top: 1px solid #263341;
+        color: #777;
     }
     @media(max-width:600px) {
         header h1 {
-            font-size: 30px;
+            font-size: 24px;
         }
-        .grid {
-            grid-template-columns: 1fr;
+        .container {
+            padding: 15px;
         }
     }
 </style>
@@ -187,425 +124,400 @@
 <body>
 <header>
     <h1>R6 SIEGE OPERATOR GUIDE</h1>
-    <p>Operator abilities, specialties, gadgets and playstyle information</p>
+    <p>Map • Site • Operator Recommendations</p>
 </header>
-<div class="controls">
-    <input
-        id="search"
-        type="text"
-        placeholder="Search an operator, ability, or specialty..."
-        oninput="renderOperators()"
-    >
-    <div class="filters">
-        <button class="active" onclick="setSide('All', this)">All</button>
-        <button onclick="setSide('Attacker', this)">Attackers</button>
-        <button onclick="setSide('Defender', this)">Defenders</button>
+<div class="container">
+    <div class="controls">
+        <select id="side" onchange="updateGuide()">
+            <option value="all">Attack + Defense</option>
+            <option value="attack">Attackers</option>
+            <option value="defense">Defenders</option>
+        </select>
+        <select id="map" onchange="updateGuide()">
+            <option value="all">All Maps</option>
+            <option value="bank">Bank</option>
+            <option value="border">Border</option>
+            <option value="chalet">Chalet</option>
+            <option value="clubhouse">Clubhouse</option>
+            <option value="consulate">Consulate</option>
+            <option value="kafe">Kafe</option>
+            <option value="lair">Lair</option>
+            <option value="nighthaven">Nighthaven Labs</option>
+            <option value="fortress">Fortress</option>
+            <option value="calypso">Calypso Casino</option>
+            <option value="villa">Villa</option>
+            <option value="oregon">Oregon</option>
+            <option value="coastline">Coastline</option>
+        </select>
+        <input
+            id="search"
+            type="text"
+            placeholder="Search operator or map..."
+            oninput="updateGuide()"
+        >
     </div>
-    <div class="filters">
-        <button onclick="setSpecialty('All', this)">All Specialties</button>
-        <button onclick="setSpecialty('Intel', this)">Intel</button>
-        <button onclick="setSpecialty('Support', this)">Support</button>
-        <button onclick="setSpecialty('Front Line', this)">Front Line</button>
-        <button onclick="setSpecialty('Map Control', this)">Map Control</button>
-        <button onclick="setSpecialty('Anti-Gadget', this)">Anti-Gadget</button>
-        <button onclick="setSpecialty('Anti-Entry', this)">Anti-Entry</button>
-        <button onclick="setSpecialty('Trapper', this)">Trapper</button>
-    </div>
+    <div id="guide"></div>
 </div>
-<div id="operatorGrid" class="grid"></div>
 <footer>
-    Rainbow Six Siege Operator Reference • Fan-made project
+    R6 Siege Strategy Guide • Update operator/map data as the game changes
 </footer>
 <script>
-const operators = [
-/* ================= ATTACKERS ================= */
-{
-    name:"Iana",
-    side:"Attacker",
-    specialties:["Front Line","Intel"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Gemini Replicator",
-    description:"Creates a remotely controlled holographic copy that can gather information and create confusion.",
-    gadgets:["Impact EMP Grenade","Smoke Grenade"]
-},
-{
-    name:"Sens",
-    side:"Attacker",
-    specialties:["Support","Map Control"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"R.O.U. Projector System",
-    description:"Creates a moving screen that blocks lines of sight while still allowing physical objects to pass through.",
-    gadgets:["Claymore","Frag Grenade","Hard Breach Charge"]
-},
-{
-    name:"Grim",
-    side:"Attacker",
-    specialties:["Map Control","Front Line"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Kawan Hive Launcher",
-    description:"Deploys a swarm that tracks opponents who enter its area.",
-    gadgets:["Claymore","Hard Breach Charge","Impact EMP Grenade"]
-},
-{
-    name:"Ying",
-    side:"Attacker",
-    specialties:["Front Line","Map Control"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Candela",
-    description:"Deploys flash devices that can be thrown or attached to surfaces.",
-    gadgets:["Hard Breach Charge","Smoke Grenade"]
-},
-{
-    name:"IQ",
-    side:"Attacker",
-    specialties:["Intel","Support"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Electronics Detector",
-    description:"Detects electronic devices through surfaces at close range.",
-    gadgets:["Breach Charge","Frag Grenade","Claymore"]
-},
-{
-    name:"Finka",
-    side:"Attacker",
-    specialties:["Front Line","Support"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Adrenal Surge",
-    description:"Provides the team with a temporary boost and can assist teammates who are down.",
-    gadgets:["Frag Grenade","Smoke Grenade","Stun Grenade"]
-},
-{
-    name:"Striker",
-    side:"Attacker",
-    specialties:["Support"],
-    health:3,
-    speed:3,
-    difficulty:1,
-    ability:"Recruit Equipment",
-    description:"A flexible attacker with access to a variety of team-support equipment.",
-    gadgets:["Multiple attacker gadgets"]
-},
-{
-    name:"Sledge",
-    side:"Attacker",
-    specialties:["Front Line","Map Control"],
-    health:3,
-    speed:3,
-    difficulty:1,
-    ability:"Breaching Hammer",
-    description:"Uses a breaching hammer to quickly create openings through soft surfaces.",
-    gadgets:["Fragmentation Grenade","Stun Grenade"]
-},
-{
-    name:"Thatcher",
-    side:"Attacker",
-    specialties:["Anti-Gadget","Support"],
-    health:3,
-    speed:3,
-    difficulty:2,
-    ability:"EMP Grenade",
-    description:"Disables nearby electronic defensive equipment temporarily.",
-    gadgets:["Breach Charge","Claymore"]
-},
-{
-    name:"Ash",
-    side:"Attacker",
-    specialties:["Front Line","Anti-Gadget"],
-    health:1,
-    speed:3,
-    difficulty:2,
-    ability:"Breaching Rounds",
-    description:"Fires specialized projectiles that create openings and destroy certain obstacles.",
-    gadgets:["Breach Charge","Claymore"]
-},
-{
-    name:"Thermite",
-    side:"Attacker",
-    specialties:["Support","Anti-Gadget"],
-    health:2,
-    speed:2,
-    difficulty:1,
-    ability:"Exothermic Charge",
-    description:"Creates large openings in reinforced surfaces.",
-    gadgets:["Smoke Grenade","Hard Breach Charge"]
-},
-{
-    name:"Twitch",
-    side:"Attacker",
-    specialties:["Anti-Gadget","Support"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Shock Drone",
-    description:"Uses specialized drones to provide information and interact with defensive equipment.",
-    gadgets:["Claymore","Smoke Grenade"]
-},
-/* ================= DEFENDERS ================= */
-{
-    name:"Sentry",
-    side:"Defender",
-    specialties:["Support"],
-    health:3,
-    speed:3,
-    difficulty:1,
-    ability:"Recruit Equipment",
-    description:"A flexible defender with access to a broad selection of defensive equipment.",
-    gadgets:["Barbed Wire","Bulletproof Camera","Deployable Shield","Observation Blocker","Impact Grenade","Nitro Cell","Proximity Alarm"]
-},
-{
-    name:"Ela",
-    side:"Defender",
-    specialties:["Crowd Control","Trapper"],
-    health:3,
-    speed:3,
-    difficulty:3,
-    ability:"Grzmot Mine",
-    description:"Proximity mines that impair opponents caught within their effect.",
-    gadgets:["Barbed Wire","Deployable Shield","Impact Grenade"]
-},
-{
-    name:"Kaid",
-    side:"Defender",
-    specialties:["Anti-Entry","Anti-Gadget"],
-    health:3,
-    speed:1,
-    difficulty:2,
-    ability:"Rtila Electroclaw",
-    description:"Electrifies nearby reinforced surfaces and certain defensive objects.",
-    gadgets:["Barbed Wire","Nitro Cell","Observation Blocker"]
-},
-{
-    name:"Doc",
-    side:"Defender",
-    specialties:["Support"],
-    health:3,
-    speed:3,
-    difficulty:2,
-    ability:"Stim Pistol",
-    description:"Can restore health to teammates from a distance and assist downed teammates.",
-    gadgets:["Bulletproof Camera","Barbed Wire"]
-},
-{
-    name:"Echo",
-    side:"Defender",
-    specialties:["Intel","Crowd Control"],
-    health:3,
-    speed:2,
-    difficulty:3,
-    ability:"Yokai",
-    description:"Uses specialized drones to provide surveillance and disrupt opponents.",
-    gadgets:["Impact Grenade","Deployable Shield"]
-},
-{
-    name:"Mute",
-    side:["Anti-Gadget","Intel"],
-    health:2,
-    speed:2,
-    difficulty:1,
-    ability:"Signal Disruptor",
-    description:"Disrupts certain electronic devices within its range.",
-    gadgets:["Nitro Cell","Bulletproof Camera"]
-},
-{
-    name:"Smoke",
-    side:"Defender",
-    specialties:["Crowd Control","Anti-Entry"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Remote Gas Grenade",
-    description:"Creates an area that temporarily denies access.",
-    gadgets:["Barbed Wire","Proximity Alarm"]
-},
-{
-    name:"Castle",
-    side:"Defender",
-    specialties:["Support","Map Control"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Armor Panel",
-    description:"Reinforces selected doorways and windows with protective panels.",
-    gadgets:["Bulletproof Camera","Proximity Alarm"]
-},
-{
-    name:"Pulse",
-    side:"Defender",
-    specialties:["Intel"],
-    health:1,
-    speed:3,
-    difficulty:2,
-    ability:"Heartbeat Sensor",
-    description:"Detects opponents through surfaces at close range.",
-    gadgets:["Nitro Cell","Barbed Wire"]
-},
-{
-    name:"Jäger",
-    side:"Defender",
-    specialties:["Anti-Gadget","Support"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Active Defense",
-    description:"Deploys defensive systems designed to intercept certain incoming projectiles.",
-    gadgets:["Barbed Wire","Bulletproof Camera"]
-},
-{
-    name:"Kapkan",
-    side:"Defender",
-    specialties:["Trapper","Anti-Entry"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Entry Denial Device",
-    description:"Places hidden entry traps around doors and windows.",
-    gadgets:["Nitro Cell","Bulletproof Camera"]
-},
-{
-    name:"Frost",
-    side:"Defender",
-    specialties:["Trapper","Support"],
-    health:2,
-    speed:2,
-    difficulty:2,
-    ability:"Welcome Mat",
-    description:"Places traps that can incapacitate opponents who step on them.",
-    gadgets:["Bulletproof Camera","Deployable Shield"]
+const maps = {
+    bank: {
+        name: "Bank",
+        sites: [
+            {
+                name: "Basement",
+                attack: [
+                    ["Thermite", "Hard Breach / Wall opening"],
+                    ["Ace", "Hard Breach / Pressure"],
+                    ["Buck", "Vertical destruction"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Wall and drone denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Kaid", "Electrification"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    border: {
+        name: "Border",
+        sites: [
+            {
+                name: "Armory / Archives",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Hibana", "Hard Breach"],
+                    ["Ying", "Site pressure"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Information denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"],
+                    ["Wamai", "Projectile interception"]
+                ]
+            }
+        ]
+    },
+    chalet: {
+        name: "Chalet",
+        sites: [
+            {
+                name: "Master Bedroom",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical play"],
+                    ["Twitch", "Gadget destruction"]
+                ],
+                defense: [
+                    ["Kaid", "Wall denial"],
+                    ["Mute", "Gadget denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Wamai", "Projectile interception"]
+                ]
+            }
+        ]
+    },
+    clubhouse: {
+        name: "Clubhouse",
+        sites: [
+            {
+                name: "Church / Arsenal",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Hard Breach"],
+                    ["Buck", "Vertical pressure"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Denial"],
+                    ["Kaid", "Wall denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    consulate: {
+        name: "Consulate",
+        sites: [
+            {
+                name: "Basement",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical destruction"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Drone denial"],
+                    ["Kaid", "Reinforcement denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Wamai", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    kafe: {
+        name: "Kafe",
+        sites: [
+            {
+                name: "Reading / Fireplace",
+                attack: [
+                    ["Buck", "Vertical destruction"],
+                    ["Ace", "Hard Breach"],
+                    ["Dokkaebi", "Intel disruption"],
+                    ["Ying", "Site pressure"]
+                ],
+                defense: [
+                    ["Smoke", "Plant denial"],
+                    ["Mute", "Denial"],
+                    ["Jäger", "Projectile protection"],
+                    ["Wamai", "Projectile interception"]
+                ]
+            }
+        ]
+    },
+    lair: {
+        name: "Lair",
+        sites: [
+            {
+                name: "Main Site",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical pressure"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Information denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"],
+                    ["Kaid", "Reinforcement denial"]
+                ]
+            }
+        ]
+    },
+    nighthaven: {
+        name: "Nighthaven Labs",
+        sites: [
+            {
+                name: "Basement",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Hard Breach"],
+                    ["Buck", "Vertical play"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Denial"],
+                    ["Kaid", "Wall denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    fortress: {
+        name: "Fortress",
+        sites: [
+            {
+                name: "Main Objective",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical destruction"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Kaid", "Wall denial"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    calypso: {
+        name: "Calypso Casino",
+        sites: [
+            {
+                name: "Vault",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical pressure"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Information denial"],
+                    ["Kaid", "Reinforcement denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    villa: {
+        name: "Villa",
+        sites: [
+            {
+                name: "Living Room / Library",
+                attack: [
+                    ["Buck", "Vertical destruction"],
+                    ["Thermite", "Hard Breach"],
+                    ["Dokkaebi", "Intel disruption"],
+                    ["Ying", "Site pressure"]
+                ],
+                defense: [
+                    ["Mute", "Denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"],
+                    ["Kaid", "Wall denial"]
+                ]
+            }
+        ]
+    },
+    oregon: {
+        name: "Oregon",
+        sites: [
+            {
+                name: "Basement",
+                attack: [
+                    ["Thermite", "Hard Breach"],
+                    ["Ace", "Wall opening"],
+                    ["Buck", "Vertical pressure"],
+                    ["Dokkaebi", "Intel disruption"]
+                ],
+                defense: [
+                    ["Mute", "Drone denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Kaid", "Wall denial"],
+                    ["Jäger", "Projectile protection"]
+                ]
+            }
+        ]
+    },
+    coastline: {
+        name: "Coastline",
+        sites: [
+            {
+                name: "Hookah / Billiards",
+                attack: [
+                    ["Dokkaebi", "Intel disruption"],
+                    ["Ying", "Site pressure"],
+                    ["Buck", "Vertical destruction"],
+                    ["Twitch", "Gadget destruction"]
+                ],
+                defense: [
+                    ["Mute", "Denial"],
+                    ["Smoke", "Plant denial"],
+                    ["Jäger", "Projectile protection"],
+                    ["Wamai", "Projectile interception"]
+                ]
+            }
+        ]
+    }
+};
+function createOperator(name, description, side) {
+    return `
+        <div class="operator">
+            <h4>${name}</h4>
+            <p>${description}</p>
+            <span class="role">
+                ${side === "attack" ? "ATTACKER" : "DEFENDER"}
+            </span>
+        </div>
+    `;
 }
-];
-let currentSide = "All";
-let currentSpecialty = "All";
-function setSide(side, button) {
-    currentSide = side;
-    document.querySelectorAll(".filters button").forEach(btn => {
-        btn.classList.remove("active");
-    });
-    button.classList.add("active");
-    renderOperators();
-}
-function setSpecialty(specialty, button) {
-    currentSpecialty = specialty;
-    document.querySelectorAll(".filters button").forEach(btn => {
-        btn.classList.remove("active");
-    });
-    button.classList.add("active");
-    renderOperators();
-}
-function renderOperators() {
-    const grid = document.getElementById("operatorGrid");
+function updateGuide() {
+    const selectedMap =
+        document.getElementById("map").value;
+    const selectedSide =
+        document.getElementById("side").value;
     const search =
         document.getElementById("search")
         .value
         .toLowerCase();
-    const filtered = operators.filter(operator => {
-        const matchesSide =
-            currentSide === "All" ||
-            operator.side === currentSide;
-        const matchesSpecialty =
-            currentSpecialty === "All" ||
-            operator.specialties.includes(currentSpecialty);
-        const searchable =
-            operator.name.toLowerCase().includes(search) ||
-            operator.ability.toLowerCase().includes(search) ||
-            operator.description.toLowerCase().includes(search) ||
-            operator.specialties.join(" ").toLowerCase().includes(search);
-        return matchesSide &&
-               matchesSpecialty &&
-               searchable;
+    const guide =
+        document.getElementById("guide");
+    guide.innerHTML = "";
+    Object.keys(maps).forEach(key => {
+        if (selectedMap !== "all" && selectedMap !== key)
+            return;
+        const map = maps[key];
+        if (
+            search &&
+            !map.name.toLowerCase().includes(search)
+        )
+            return;
+        let html = `
+            <div class="map-card">
+                <h2>${map.name}</h2>
+        `;
+        map.sites.forEach(site => {
+            html += `
+                <div class="site">
+                    <h3>${site.name}</h3>
+            `;
+            if (
+                selectedSide === "all" ||
+                selectedSide === "attack"
+            ) {
+                html += `
+                    <h4>⚔️ Attackers</h4>
+                    <div class="operators">
+                `;
+                site.attack.forEach(op => {
+                    if (
+                        !search ||
+                        op[0].toLowerCase().includes(search)
+                    ) {
+                        html += createOperator(
+                            op[0],
+                            op[1],
+                            "attack"
+                        );
+                    }
+                });
+                html += `</div>`;
+            }
+            if (
+                selectedSide === "all" ||
+                selectedSide === "defense"
+            ) {
+                html += `
+                    <h4 style="margin-top:20px">
+                        🛡️ Defenders
+                    </h4>
+                    <div class="operators">
+                `;
+                site.defense.forEach(op => {
+                    if (
+                        !search ||
+                        op[0].toLowerCase().includes(search)
+                    ) {
+                        html += createOperator(
+                            op[0],
+                            op[1],
+                            "defense"
+                        );
+                    }
+                });
+                html += `</div>`;
+            }
+            html += `</div>`;
+        });
+        html += `</div>`;
+        guide.innerHTML += html;
     });
-    if(filtered.length === 0) {
-        grid.innerHTML = `
-            <div class="empty">
-                <h2>No operators found</h2>
-                <p>Try another search or filter.</p>
-            </div>
-        `;
-        return;
-    }
-    grid.innerHTML = filtered.map(operator => {
-        const sideClass =
-            operator.side === "Attacker"
-            ? "attacker"
-            : "defender";
-        return `
-        <div class="card">
-            <div class="operator-name">
-                ${operator.name}
-            </div>
-            <span class="side ${sideClass}">
-                ${operator.side}
-            </span>
-            <div class="section">
-                <div class="section-title">
-                    Specialties
-                </div>
-                <div class="tags">
-                    ${operator.specialties.map(s =>
-                        `<span class="tag">${s}</span>`
-                    ).join("")}
-                </div>
-            </div>
-            <div class="section">
-                <div class="section-title">
-                    Unique Ability
-                </div>
-                <div class="ability">
-                    ${operator.ability}
-                </div>
-                <p class="description">
-                    ${operator.description}
-                </p>
-            </div>
-            <div class="section">
-                <div class="section-title">
-                    Secondary Gadgets
-                </div>
-                ${operator.gadgets.map(g =>
-                    `<div class="gadget">• ${g}</div>`
-                ).join("")}
-            </div>
-            <div class="stats">
-                <div class="stat">
-                    <span class="stat-label">
-                        Health
-                    </span>
-                    <span class="stat-value">
-                        ${operator.health}/3
-                    </span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">
-                        Speed
-                    </span>
-                    <span class="stat-value">
-                        ${operator.speed}/3
-                    </span>
-                </div>
-                <div class="stat">
-                    <span class="stat-label">
-                        Difficulty
-                    </span>
-                    <span class="stat-value">
-                        ${operator.difficulty}/3
-                    </span>
-                </div>
-            </div>
-        </div>
-        `;
-    }).join("");
 }
-renderOperators();
+updateGuide();
 </script>
 </body>
 </html>
