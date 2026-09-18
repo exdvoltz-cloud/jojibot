@@ -821,4 +821,29 @@ function toggleBot(element) {
 
 </body>
 </html>
+/* Ensure the parent card properly bounds its child elements */
+.trade-card-container {
+  position: relative;
+  overflow: hidden; /* Prevents child elements from spilling out */
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Fix floating element positioning */
+.floating-bot-menu {
+  position: static; /* Resets unwanted absolute positioning */
+  width: 100%;
+  margin-top: 15px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* Ensure mobile responsiveness */
+@media (max-width: 480px) {
+  body {
+    overflow-x: hidden; /* Stops horizontal scrolling on mobile */
+  }
+}
+
 
