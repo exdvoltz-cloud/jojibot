@@ -845,5 +845,42 @@ function toggleBot(element) {
     overflow-x: hidden; /* Stops horizontal scrolling on mobile */
   }
 }
+/* 1. Reset the entire layout container */
+body {
+  margin: 0;
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100vw;
+  box-sizing: border-box;
+  overflow-x: hidden; /* Prevents side-scrolling */
+}
+
+/* 2. Target the broken floating panel and force it inline */
+div[style*="position: absolute"],
+div[style*="position: fixed"],
+.trade-panel, 
+.bot-container {
+  position: relative !important; /* Forces element back into normal page flow */
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  bottom: auto !important;
+  transform: none !important;
+  width: 100% !important;
+  max-width: 400px !important;
+  margin: 12px 0 !important;
+  float: none !important;
+}
+
+/* 3. Ensure cards stay stacked vertically */
+.card, .trade-card {
+  width: 100% !important;
+  max-width: 400px !important;
+  box-sizing: border-box;
+  display: block !important;
+}
+
 
 
