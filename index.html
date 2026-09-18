@@ -668,3 +668,25 @@ function toggleBot(element) {
 
 </body>
 </html>
+// 1. Get references to your HTML elements
+const shareInput = document.querySelector('input[type="number"]'); 
+const priceDisplay = document.querySelector('.Trade-card-price-element'); // Replace with your exact price element class/ID
+
+// 2. Set the base price per share
+const singleSharePrice = 78.42;
+
+// 3. Function to update the total
+function updateTradeTotal() {
+  const shares = parseFloat(shareInput.value) || 0;
+  const totalCost = shares * singleSharePrice;
+  
+  // Format as currency ($7,842.00)
+  priceDisplay.textContent = `$${totalCost.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}`;
+}
+
+// 4. Attach event listeners for real-time updating
+shareInput.addEventListener('input', updateTradeTotal);
+shareInput.addEventListener('keyup', updateTradeTotal);
