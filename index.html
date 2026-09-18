@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>JojiBot Trading</title>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+<script src="https://cdn.jsdelivr.net/npm/luxon"></script>
+<script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0;font-family:Arial,sans-serif}
+body{background:#080b10;color:#fff}header{height:70px;background:#0d1118;border-bottom:1px solid #202631;display:flex;align-items:center;justify-content:space-between;padding:0 30px}
+.logo{font-size:24px;font-weight:bold}.logo span{color:#00e676}.status{display:flex;align-items:center;gap:8px;color:#00e676;font-size:14px}.dot{width:9px;height:9px;background:#00e676;border-radius:50%}
+.container{display:grid;grid-template-columns:220px 1fr;min-height:calc(100vh - 70px)}aside{background:#0d1118;border-right:1px solid #202631;padding:25px 15px}.nav-item{padding:14px;margin-bottom:8px;border-radius:8px;color:#9aa4b2;cursor:pointer}.nav-item:hover,.active{background:#151b24;color:#fff}
+main{padding:25px}.top-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:15px;margin-bottom:20px}.card{background:#0d1118;border:1px solid #202631;border-radius:12px;padding:20px}.card-title{color:#8c96a5;font-size:13px;margin-bottom:10px}.big-number{font-size:25px;font-weight:bold}.green{color:#00e676}.red{color:#ff5252}
+.middle{display:grid;grid-template-columns:1fr 300px;gap:20px}.chart-card{min-height:500px}.chart-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:20px}.symbol{font-size:22px;font-weight:bold}.chart-container{height:400px}select{background:#151b24;color:#fff;border:1px solid #303846;padding:10px;border-radius:7px}
+.trade-panel h2{margin-bottom:20px}.price{font-size:30px;font-weight:bold;margin-bottom:5px}.trade-input{width:100%;margin:20px 0}.trade-input label{display:block;color:#8c96a5;font-size:13px;margin-bottom:8px}input[type=number]{width:100%;background:#151b24;border:1px solid #303846;color:#fff;padding:12px;border-radius:7px;outline:none}
+.buttons{display:grid;grid-template-columns:1fr 1fr;gap:10px}button{border:none;padding:13px;border-radius:7px;color:#fff;font-weight:bold;cursor:pointer}.buy{background:#00a95c}.sell{background:#d83a3a}
+.bot-box{margin-top:20px;padding-top:20px;border-top:1px solid #202631}.bot-toggle{display:flex;align-items:center;justify-content:space-between}.switch{position:relative;width:50px;height:27px}.switch input{display:none}.slider{position:absolute;inset:0;background:#303846;border-radius:20px;cursor:pointer}.slider:before{content:"";position:absolute;height:21px;width:21px;left:3px;top:3px;background:#fff;border-radius:50%;transition:.2s}.switch input:checked+.slider{background:#00a95c}.switch input:checked+.slider:before{transform:translateX(23px)}
+.watchlist{margin-top:20px}.stock{display:flex;justify-content:space-between;padding:15px 0;border-bottom:1px solid #202631;cursor:pointer}.stock-name{font-weight:bold}.stock-sub{color:#7e8795;font-size:12px;margin-top:4px}
+@media(max-width:900px){.container{grid-template-columns:1fr}aside{display:none}.top-grid{grid-template-columns:repeat(2,1fr)}.middle{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header><div class="logo">Joji<span>Bot</span></div><div class="status"><div class="dot"></div>Paper Trading</div></header>
+<div class="container">
+<aside><div class="nav-item active">📊 Dashboard</div><div class="nav-item">💼 Portfolio</div><div class="nav-item">📈 Markets</div><div class="nav-item">🤖 Trading Bot</div><div class="nav-item">⚙️ Settings</div></aside>
+<main>
+<div class="top-grid">
+<div class="card"><div class="card-title">Portfolio Value</div><div class="big-number" id="portfolio">$10,000.00</div></div>
+<div class="card"><div class="card-title">Today's P/L</div><div class="big-number green" id="profit">+$0.00</div></div>
+<div class="card"><div class="card-title">Available Cash</div><div class="big-number" id="cash">$10,000.00</div></div>
+<div class="card"><div class="card-title">Bot Status</div><div class="big-number green" id="botStatus">ACTIVE</div></div>
+</div>
+<div class="middle">
+<div class="card chart-card">
+<div class="chart-header"><div><div class="symbol" id="symbol">NKE</div><div class="card-title" id="companyName">Nike Inc.</div></div>
+<select id="stockSelect" onchange="changeStock()"><option value="NKE">Nike (NKE)</option><option value="BTC">Bitcoin (BTC)</option></select></div>
+<div class="chart-container"><canvas id="stockChart"></canvas></div>
+</div>
+<div>
+<div class="card trade-panel"><h2>Trade</h2><div class="price" id="price">$78.42</div><div class="green" id="change">+2.31%</div>
+<div class="trade-input"><label>Shares / Amount</label><input id="amount" type="number" value="1" min="1"></div>
+<div class="buttons"><button class="buy" onclick="buyStock()">BUY</button><button class="sell" onclick="sellStock()">SELL</button></div>
+<div class="bot-box"><div class="bot-toggle"><div><strong>JojiBot</strong><div class="card-title">Automated strategy</div></div><label class="switch"><input type="checkbox" checked onchange="toggleBot(this)"><span class="slider"></span></label></div></div>
+</div>
+<div class="card watchlist"><h3>Watchlist</h3>
+<div class="stock" onclick="selectStock('NKE')"><div><div class="stock-name">NKE</div><div class="stock-sub">Nike Inc.</div></div><div><strong>$78.42</strong><div class="green">+2.31%</div></div></div>
+<div class="stock" onclick="selectStock('BTC')"><div><div class="stock-name">BTC</div><div class="stock-sub">Bitcoin</div></div><div><strong>$67,420</strong><div class="green">+1.84%</div></div></div>
+</div></div></div></main></div>
+<script>
+let cash=10000,holdings={NKE:0,BTC:0},currentStock="NKE";
+const prices={NKE:78.42,BTC:67420},names={NKE:"Nike Inc.",BTC:"Bitcoin"},changes={NKE:"+2.31%",BTC:"+1.84%"};
+function createData(base){let data=[],price=base;for(let i=0;i<40;i++){let open=price,change=(Math.random()-.48)*base*.025,close=open+change,high=Math.max(open,close)+Math.random()*base*.012,low=Math.min(open,close)-Math.random()*base*.012;data.push({x:Date.now()-(40-i)*3600000,o:open,h:high,l:low,c:close});price=close}return data}
+const ctx=document.getElementById("stockChart");
+let chart=new Chart(ctx,{type:"candlestick",data:{datasets:[{label:"Price",data:createData(prices.NKE)}]},options:{responsive:true,maintainAspectRatio:false,scales:{x:{type:"time",time:{unit:"hour"},grid:{color:"#202631"}},y:{grid:{color:"#202631"}}},plugins:{legend:{display:false}}}});
+function updateStock(){document.getElementById("symbol").innerText=currentStock;document.getElementById("companyName").innerText=names[currentStock];document.getElementById("price").innerText="$"+prices[currentStock].toLocaleString();document.getElementById("change").innerText=changes[currentStock];chart.data.datasets[0].data=createData(prices[currentStock]);chart.update()}
+function changeStock(){currentStock=document.getElementById("stockSelect").value;updateStock()}
+function selectStock(stock){currentStock=stock;document.getElementById("stockSelect").value=stock;updateStock()}
+function buyStock(){let amount=Number(document.getElementById("amount").value),cost=prices[currentStock]*amount;if(cost>cash)return alert("Not enough paper-trading cash.");cash-=cost;holdings[currentStock]+=amount;updateAccount();alert("Paper trade: BUY "+amount+" "+currentStock)}
+function sellStock(){let amount=Number(document.getElementById("amount").value);if(amount>holdings[currentStock])return alert("You don't have enough paper holdings.");cash+=prices[currentStock]*amount;holdings[currentStock]-=amount;updateAccount();alert("Paper trade: SELL "+amount+" "+currentStock)}
+function updateAccount(){let portfolio=cash+holdings[currentStock]*prices[currentStock];document.getElementById("cash").innerText="$"+cash.toLocaleString(undefined,{minimumFractionDigits:2});document.getElementById("portfolio").innerText="$"+portfolio.toLocaleString(undefined,{minimumFractionDigits:2})}
+function toggleBot(el){let s=document.getElementById("botStatus");s.innerText=el.checked?"ACTIVE":"OFF";s.className="big-number "+(el.checked?"green":"red")}
+</script>
+</body>
+</html>
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v6
+      - name: Setup Pages
+        uses: actions/configure-pages@v5
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: '.'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
