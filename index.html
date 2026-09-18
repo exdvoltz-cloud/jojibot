@@ -121,4 +121,33 @@ function handleSell(sharesToSell) {
     console.log("Not enough shares to sell.");
   }
 }
+// Example paper trading state structure
+let userHoldings = {
+  BTC: 0, // Number of Bitcoin holdings
+  NKE: 0  // Number of Nike holdings
+};
+
+let userCash = 10000.00; // Starting virtual cash balance
+
+function executeSell(symbol, amountToSell, currentPrice) {
+  // Check if user has sufficient paper holdings for the selected asset
+  if (!userHoldings[symbol] || userHoldings[symbol] < amountToSell) {
+    // This triggers the pop-up modal shown in your screenshot
+    showModal("You don't have enough paper holdings.");
+    return;
+  }
+
+  // Execute trade if validation passes
+  let totalRevenue = amountToSell * currentPrice;
+  userHoldings[symbol] -= amountToSell;
+  userCash += totalRevenue;
+
+  updateUI();
+}
+
+// Optional: Helper function to manually add initial paper holdings for testing
+function setInitialPaperHoldings(symbol, quantity) {
+  userHoldings[symbol] = quantity;
+  updateUI();
+}
 
