@@ -1043,4 +1043,33 @@ function toggleBot(element) {
 
 </body>
 </html>
+function fixHeaderOverlap() {
+  // Select the title and timestamp elements (adjust selectors to match your HTML)
+  const title = document.querySelector('.portfolio-title');
+  const timestamp = document.querySelector('.timestamp');
+
+  if (title && timestamp) {
+    const titleRect = title.getBoundingClientRect();
+    const timeRect = timestamp.getBoundingClientRect();
+
+    // Check if the elements collide horizontally/vertically
+    const isOverlapping = !(
+      titleRect.right < timeRect.left ||
+      titleRect.left > timeRect.right ||
+      titleRect.bottom < timeRect.top ||
+      titleRect.top > timeRect.bottom
+    );
+
+    if (isOverlapping) {
+      // Adjust positioning dynamically
+      timestamp.style.position = 'relative';
+      timestamp.style.top = '0';
+      timestamp.style.marginLeft = '10px';
+    }
+  }
+}
+
+// Run after DOM load
+window.addEventListener('DOMContentLoaded', fixHeaderOverlap);
+
 
