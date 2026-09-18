@@ -1,0 +1,1075 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>DinoBot Trading</title>
+
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-chart-financial"></script>
+  <script src="https://cdn.jsdelivr.net/npm/luxon"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-luxon"></script>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background: #080b10;
+      color: white;
+    }
+
+    header {
+      height: 70px;
+      background: #0d1118;
+      border-bottom: 1px solid #202631;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 30px;
+    }
+
+    .logo {
+      font-size: 24px;
+      font-weight: bold;
+    }
+
+    .logo span {
+      color: #00e676;
+    }
+
+    .status {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: #00e676;
+      font-size: 14px;
+    }
+
+    .dot {
+      width: 9px;
+      height: 9px;
+      background: #00e676;
+      border-radius: 50%;
+    }
+
+    .container {
+      display: grid;
+      grid-template-columns: 220px 1fr;
+      min-height: calc(100vh - 70px);
+    }
+
+    aside {
+      background: #0d1118;
+      border-right: 1px solid #202631;
+      padding: 25px 15px;
+    }
+
+    .nav-item {
+      padding: 14px;
+      margin-bottom: 8px;
+      border-radius: 8px;
+      color: #9aa4b2;
+      cursor: pointer;
+    }
+
+    .nav-item:hover,
+    .active {
+      background: #151b24;
+      color: white;
+    }
+
+    main {
+      padding: 25px;
+    }
+
+    .top-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 15px;
+      margin-bottom: 20px;
+    }
+
+    .card {
+      background: #0d1118;
+      border: 1px solid #202631;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .card-title {
+      color: #8c96a5;
+      font-size: 13px;
+      margin-bottom: 10px;
+    }
+
+    .big-number {
+      font-size: 25px;
+      font-weight: bold;
+    }
+
+    .green {
+      color: #00e676;
+    }
+
+    .red {
+      color: #ff5252;
+    }
+
+    .middle {
+      display: grid;
+      grid-template-columns: 1fr 300px;
+      gap: 20px;
+    }
+
+    .chart-card {
+      min-height: 500px;
+    }
+
+    .chart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .symbol {
+      font-size: 22px;
+      font-weight: bold;
+    }
+
+    select {
+      background: #151b24;
+      color: white;
+      border: 1px solid #303846;
+      padding: 10px;
+      border-radius: 7px;
+    }
+
+    .chart-container {
+      height: 400px;
+    }
+
+    .trade-panel h2 {
+      margin-bottom: 20px;
+    }
+
+    .price {
+      font-size: 30px;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    .trade-input {
+      width: 100%;
+      margin: 20px 0;
+    }
+
+    .trade-input label {
+      display: block;
+      color: #8c96a5;
+      font-size: 13px;
+      margin-bottom: 8px;
+    }
+
+    input {
+      width: 100%;
+      background: #151b24;
+      border: 1px solid #303846;
+      color: white;
+      padding: 12px;
+      border-radius: 7px;
+      outline: none;
+    }
+
+    .buttons {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+
+    button {
+      border: none;
+      padding: 13px;
+      border-radius: 7px;
+      color: white;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .buy {
+      background: #00a95c;
+    }
+
+    .buy:hover {
+      background: #00c96d;
+    }
+
+    .sell {
+      background: #d83a3a;
+    }
+
+    .sell:hover {
+      background: #f04444;
+    }
+
+    .bot-box {
+      margin-top: 20px;
+      padding-top: 20px;
+      border-top: 1px solid #202631;
+    }
+
+    .bot-toggle {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .switch {
+      position: relative;
+      width: 50px;
+      height: 27px;
+    }
+
+    .switch input {
+      display: none;
+    }
+
+    .slider {
+      position: absolute;
+      inset: 0;
+      background: #303846;
+      border-radius: 20px;
+      cursor: pointer;
+    }
+
+    .slider:before {
+      content: "";
+      position: absolute;
+      height: 21px;
+      width: 21px;
+      left: 3px;
+      top: 3px;
+      background: white;
+      border-radius: 50%;
+      transition: .2s;
+    }
+
+    input:checked + .slider {
+      background: #00a95c;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(23px);
+    }
+
+    .watchlist {
+      margin-top: 20px;
+    }
+
+    .stock {
+      display: flex;
+      justify-content: space-between;
+      padding: 15px 0;
+      border-bottom: 1px solid #202631;
+      cursor: pointer;
+    }
+
+    .stock-name {
+      font-weight: bold;
+    }
+
+    .stock-sub {
+      color: #7e8795;
+      font-size: 12px;
+      margin-top: 4px;
+    }
+
+    @media(max-width: 900px) {
+      .container {
+        grid-template-columns: 1fr;
+      }
+
+      aside {
+        display: none;
+      }
+
+      .top-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .middle {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">Dino<span>Bot</span></div>
+
+  <div class="status">
+    <div class="dot"></div>
+    Paper Trading
+  </div>
+</header>
+
+<div class="container">
+
+  <aside>
+    <div class="nav-item active">📊 Dashboard</div>
+    <div class="nav-item">💼 Portfolio</div>
+    <div class="nav-item">📈 Markets</div>
+    <div class="nav-item">🤖 Trading Bot</div>
+    <div class="nav-item">⚙️ Settings</div>
+  </aside>
+
+  <main>
+
+    <div class="top-grid">
+
+      <div class="card">
+        <div class="card-title">Portfolio Value</div>
+        <div class="big-number" id="portfolio">$1,000,000.00</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Today's P/L</div>
+        <div class="big-number green" id="profit">+$0.00</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Available Cash</div>
+        <div class="big-number" id="cash">$1,000,000.00</div>
+      </div>
+
+      <div class="card">
+        <div class="card-title">Bot Status</div>
+        <div class="big-number green" id="botStatus">ACTIVE</div>
+      </div>
+
+    </div>
+
+    <div class="middle">
+
+      <div class="card chart-card">
+
+        <div class="chart-header">
+          <div>
+            <div class="symbol" id="symbol">NKE</div>
+            <div class="card-title">Nike Inc.</div>
+          </div>
+
+          <select id="stockSelect" onchange="changeStock()">
+            <option value="NKE">Nike (NKE)</option>
+            <option value="BTC">Bitcoin (BTC)</option>
+          </select>
+        </div>
+
+        <div class="chart-container">
+          <canvas id="stockChart"></canvas>
+        </div>
+
+      </div>
+
+      <div>
+
+        <div class="card trade-panel">
+
+          <h2>Trade</h2>
+
+          <div class="price" id="price">$78.42</div>
+          <div class="green">+2.31%</div>
+
+          <div class="trade-input">
+            <label>Shares / Amount</label>
+            <input id="amount" type="number" value="1" min="1">
+          </div>
+
+          <div class="buttons">
+            <button class="buy" onclick="buyStock()">BUY</button>
+            <button class="sell" onclick="sellStock()">SELL</button>
+          </div>
+
+          <div class="bot-box">
+
+            <div class="bot-toggle">
+              <div>
+                <strong>dinoBot</strong>
+                <div class="card-title">Automated strategy</div>
+              </div>
+
+              <label class="switch">
+                <input type="checkbox" checked onchange="toggleBot(this)">
+                <span class="slider"></span>
+              </label>
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="card watchlist">
+
+          <h3>Watchlist</h3>
+
+          <div class="stock" onclick="selectStock('NKE')">
+            <div>
+              <div class="stock-name">NKE</div>
+              <div class="stock-sub">Nike Inc.</div>
+            </div>
+            <div>
+              <strong>$78.42</strong>
+              <div class="green">+2.31%</div>
+            </div>
+          </div>
+
+          <div class="stock" onclick="selectStock('BTC')">
+            <div>
+              <div class="stock-name">BTC</div>
+              <div class="stock-sub">Bitcoin</div>
+            </div>
+            <div>
+              <strong>$67,420</strong>
+              <div class="green">+1.84%</div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<script>
+
+let cash = 10000;
+let holdings = 0;
+let currentStock = "NKE";
+
+const prices = {
+  NKE: 78.42,
+  BTC: 67420
+};
+
+const names = {
+  NKE: "Nike Inc.",
+  BTC: "Bitcoin"
+};
+
+function createData(base) {
+
+  let data = [];
+  let price = base;
+
+  for(let i = 0; i < 40; i++) {
+
+    let open = price;
+
+    let change = (Math.random() - 0.48) * base * 0.025;
+
+    let close = open + change;
+
+    let high = Math.max(open, close) +
+      Math.random() * base * 0.012;
+
+    let low = Math.min(open, close) -
+      Math.random() * base * 0.012;
+
+    data.push({
+      x: Date.now() - (40-i) * 3600000,
+      o: open,
+      h: high,
+      l: low,
+      c: close
+    });
+
+    price = close;
+  }
+
+  return data;
+}
+
+const ctx = document.getElementById("stockChart");
+
+let chart = new Chart(ctx, {
+
+  type: "candlestick",
+
+  data: {
+    datasets: [{
+      label: "Price",
+      data: createData(prices.NKE)
+    }]
+  },
+
+  options: {
+    responsive: true,
+    maintainAspectRatio: false,
+
+    scales: {
+
+      x: {
+        type: "time",
+        time: {
+          unit: "hour"
+        },
+        grid: {
+          color: "#202631"
+        }
+      },
+
+      y: {
+        grid: {
+          color: "#202631"
+        }
+      }
+
+    },
+
+    plugins: {
+      legend: {
+        display: false
+      }
+    }
+  }
+
+});
+
+function changeStock() {
+
+  currentStock =
+    document.getElementById("stockSelect").value;
+
+  updateStock();
+}
+
+function selectStock(stock) {
+
+  currentStock = stock;
+
+  document.getElementById("stockSelect").value = stock;
+
+  updateStock();
+}
+
+function updateStock() {
+
+  document.getElementById("symbol").innerText =
+    currentStock;
+
+  document.querySelector(".card-title").innerText =
+    names[currentStock];
+
+  document.getElementById("price").innerText =
+    "$" + prices[currentStock].toLocaleString();
+
+  chart.data.datasets[0].data =
+    createData(prices[currentStock]);
+
+  chart.update();
+
+}
+
+function buyStock() {
+
+  let amount =
+    Number(document.getElementById("amount").value);
+
+  let cost =
+    prices[currentStock] * amount;
+
+  if(cost > cash) {
+    alert("Not enough paper-trading cash.");
+    return;
+  }
+
+  cash -= cost;
+  holdings += amount;
+
+  updateAccount();
+
+  alert(
+    "Paper trade executed: BUY " +
+    amount + " " +
+    currentStock
+  );
+}
+
+function sellStock() {
+
+  let amount =
+    Number(document.getElementById("amount").value);
+
+  if(amount > holdings) {
+    alert("You don't have enough paper holdings.");
+    return;
+  }
+
+  cash += prices[currentStock] * amount;
+  holdings -= amount;
+
+  updateAccount();
+
+  alert(
+    "Paper trade executed: SELL " +
+    amount + " " +
+    currentStock
+  );
+}
+
+function updateAccount() {
+
+  document.getElementById("cash").innerText =
+    "$" + cash.toLocaleString(undefined, {
+      minimumFractionDigits: 2
+    });
+
+  let portfolio =
+    cash + holdings * prices[currentStock];
+
+  document.getElementById("portfolio").innerText =
+    "$" + portfolio.toLocaleString(undefined, {
+      minimumFractionDigits: 2
+    });
+
+}
+
+function toggleBot(element) {
+
+  const status =
+    document.getElementById("botStatus");
+
+  if(element.checked) {
+
+    status.innerText = "ACTIVE";
+    status.className = "big-number green";
+
+  } else {
+
+    status.innerText = "OFF";
+    status.className = "big-number red";
+
+  }
+
+}
+
+</script>
+
+</body>
+</html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0b0e14;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background-color: #151a23;
+      border: 1px solid #222938;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* Trade Section */
+    .ticker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .current-ticker {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #8b949e;
+    }
+
+    .price-display {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .change-percent {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #22c55e;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .number-input {
+      width: 100%;
+      background-color: #0b0e14;
+      border: 1px solid #2a3245;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .number-input:focus {
+      border-color: #3b82f6;
+    }
+
+    .cost-summary {
+      background-color: #0d1117;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cost-label {
+      font-size: 0.9rem;
+      color: #8b949e;
+    }
+
+    .total-cost {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #22c55e;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .btn-buy {
+      background-color: #22c55e;
+      color: #ffffff;
+    }
+
+    .btn-sell {
+      background-color: #ef4444;
+      color: #ffffff;
+    }
+
+    /* Bot Toggle Section */
+    .bot-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #222938;
+    }
+
+    .bot-info h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .bot-info p {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #2a3245;
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #22c55e;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Watchlist Section */
+    .watchlist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #222938;
+      cursor: pointer;
+    }
+
+    .watchlist-item:last-child {
+      border-bottom: none;
+    }
+
+    .symbol-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .company-name {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .price-info {
+      text-align: right;
+    }
+
+    .item-price {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .item-change {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Trade Card -->
+    <div class="card">
+      <div class="ticker-header">
+        <h2 class="card-title">Trade</h2>
+        <span class="current-ticker" id="currentSymbol">NKE</span>
+      </div>
+
+      <!-- Single Unit Price -->
+      <div class="price-display" id="unitPriceDisplay">$78.42</div>
+      <div class="change-percent">+2.31%</div>
+
+      <!-- Input Field -->
+      <div class="input-group">
+        <label class="input-label" for="sharesInput">Shares / Amount</label>
+        <input 
+          type="number" 
+          id="sharesInput" 
+          class="number-input" 
+          value="1" 
+          min="1" 
+          step="1"
+        />
+      </div>
+
+      <!-- Live Calculated Total Cost -->
+      <div class="cost-summary">
+        <span class="cost-label">Total Cost:</span>
+        <span class="total-cost" id="totalCostDisplay">$78.42</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button class="btn btn-buy" id="buyBtn">BUY</button>
+        <button class="btn btn-sell" id="sellBtn">SELL</button>
+      </div>
+
+      <!-- dinoBot Switch -->
+      <div class="bot-section">
+        <div class="bot-info">
+          <h3>dinoBot</h3>
+          <p>Automated strategy</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="botToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Watchlist Card -->
+    <div class="card">
+      <h2 class="card-title">Watchlist</h2>
+      
+      <div class="watchlist-item" onclick="selectStock('NKE', 78.42, '+2.31%')">
+        <div>
+          <div class="symbol-name">NKE</div>
+          <div class="company-name">Nike Inc.</div>
+        </div>
+        <div class="price-info">
+          <div class="item-price">$78.42</div>
+          <div class="item-change">+2.31%</div>
+        </div>
+      </div>
+
+      <div class="watchlist-item" onclick="selectStock('BTC', 67420, '+1.84%')">
+        <div>
+          <div class="symbol-name">BTC</div>
+          <div class="company-name">Bitcoin</div>
+        </div>
+        <div class="price-info">
+          <div class="item-price">$67,420</div>
+          <div class="item-change">+1.84%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Current stock price state
+    let currentPrice = 78.42;
+
+    // DOM Elements
+    const sharesInput = document.getElementById('sharesInput');
+    const totalCostDisplay = document.getElementById('totalCostDisplay');
+    const unitPriceDisplay = document.getElementById('unitPriceDisplay');
+    const currentSymbol = document.getElementById('currentSymbol');
+
+    // Function to calculate and update total cost display
+    function calculateTotalCost() {
+      const quantity = parseFloat(sharesInput.value) || 0;
+      const total = currentPrice * quantity;
+      
+      // Format total with commas and 2 decimal places
+      totalCostDisplay.textContent = '$' + total.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Function to handle stock selection from Watchlist
+    function selectStock(symbol, price, change) {
+      currentPrice = price;
+      currentSymbol.textContent = symbol;
+      unitPriceDisplay.textContent = '$' + price.toLocaleString('en-US');
+      calculateTotalCost();
+    }
+
+    // Add event listeners to input field for real-time calculation
+    sharesInput.addEventListener('input', calculateTotalCost);
+    sharesInput.addEventListener('change', calculateTotalCost);
+
+    // Initial calculation on page load
+    calculateTotalCost();
+  </script>
+
+</body>
+</html>
+function fixHeaderOverlap() {
+  // Select the title and timestamp elements (adjust selectors to match your HTML)
+  const title = document.querySelector('.portfolio-title');
+  const timestamp = document.querySelector('.timestamp');
+
+  if (title && timestamp) {
+    const titleRect = title.getBoundingClientRect();
+    const timeRect = timestamp.getBoundingClientRect();
+
+    // Check if the elements collide horizontally/vertically
+    const isOverlapping = !(
+      titleRect.right < timeRect.left ||
+      titleRect.left > timeRect.right ||
+      titleRect.bottom < timeRect.top ||
+      titleRect.top > timeRect.bottom
+    );
+
+    if (isOverlapping) {
+      // Adjust positioning dynamically
+      timestamp.style.position = 'relative';
+      timestamp.style.top = '0';
+      timestamp.style.marginLeft = '10px';
+    }
+  }
+}
+
+// Run after DOM load
+window.addEventListener('DOMContentLoaded', fixHeaderOverlap);l
+
+
