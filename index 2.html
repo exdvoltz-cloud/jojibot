@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Bot Simulation</title>
+  <style>
+    body {
+      background-color: #12161f;
+      color: #ffffff;
+      font-family: monospace;
+      padding: 20px;
+    }
+    h2 {
+      color: #4ade80;
+    }
+    #output {
+      background-color: #171d29;
+      border: 1px solid #374151;
+      padding: 15px;
+      border-radius: 8px;
+      white-space: pre-wrap;
+      line-height: 1.5;
+    }
+  </style>
+</head>
+<body>
+
+  <h2>Trading Bot Output</h2>
+  <div id="output"></div>
+
+  <script>
+    class SimpleTradingBot {
+      constructor(symbol, initialBalance = 1000) {
+        this.symbol = symbol;
+        this.balance = initialBalance;
+        this.position = 0; // Number of shares held
+        this.priceHistory = [];
+      }
+
+      // Calculate Simple Moving Average (SMA)
+      calculateSMA(period) {
+        if (this.priceHistory.length < period) return null;
+        const slice = this.priceHistory.slice(-period);
+        const sum = slice.reduce((acc, price) => acc + price, 0);
+        return sum / period;
+      }
+
+      // Process a new incoming market price update
+      onPriceUpdate(currentPrice) {
+        this.priceHistory.push(currentPrice);
+
+        const shortSMA = this.calculateSMA(3); // Fast moving average
+        const longSMA = this.calculateSMA(5);  // Slow moving average
+
+        if (!shortSMA || !longSMA) {
+          this.log(`[${this.symbol}] Collecting price data... (${this.priceHistory.length}/5)`);
+          return;
+        }
+
+        this.log(`[${this.symbol}] Price: $${currentPrice.toFixed(2)} | Short SMA: ${shortSMA.toFixed(2)} | Long SMA: ${longSMA.toFixed(2)}`);
+
+        // Bullish crossover: Buy signal
+        if (shortSMA > longSMA && this.position === 0) {
+          this.executeBuy(currentPrice);
+        } 
+        // Bearish crossover: Sell signal
+        else if (shortSMA < longSMA && this.position > 0) {
+          this.executeSell(currentPrice);
+        }
+      }
+
+      executeBuy(price) {
+        const sharesToBuy = Math.floor(this.balance / price);
+        if (sharesToBuy > 0) {
+          this.position = sharesToBuy;
+          const cost = sharesToBuy * price;
+          this.balance -= cost;
+          this.log(`🟢 BUY: ${sharesToBuy} shares at $${price.toFixed(2)} (Spent: $${cost.toFixed(2)}, Cash Left: $${this.balance.toFixed(2)})`);
+        }
+      }
+
+      executeSell(price) {
+        const revenue = this.position * price;
+        this.balance += revenue;
+        this.log(`🔴 SELL: ${this.position} shares at $${price.toFixed(2)} (Received: $${revenue.toFixed(2)}, Total Cash: $${this.balance.toFixed(2)})`);
+        this.position = 0;
+      }
+
+      log(message) {
+        console.log(message);
+        const outputDiv = document.getElementById("output");
+        if (outputDiv) {
+          outputDiv.innerHTML += message + "<br>";
+        }
+      }
+    }
+
+    // Run simulation
+    const bot = new SimpleTradingBot("NKE", 1000);
+    const simulatedPrices = [75.0, 75.5, 76.0, 77.2, 78.4, 77.0, 76.2, 75.8, 77.0, 78.5];
+
+    simulatedPrices.forEach(price => bot.onPriceUpdate(price));
+  </script>
+</body>
+</html>
