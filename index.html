@@ -667,29 +667,380 @@ function toggleBot(element) {
 </script>
 
 </body>
+</html 
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Trading Dashboard</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
+
+    body {
+      background-color: #0b0e14;
+      color: #ffffff;
+      display: flex;
+      justify-content: center;
+      padding: 20px 10px;
+      min-height: 100vh;
+    }
+
+    .app-container {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .card {
+      background-color: #151a23;
+      border: 1px solid #222938;
+      border-radius: 16px;
+      padding: 20px;
+    }
+
+    .card-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-bottom: 12px;
+    }
+
+    /* Trade Section */
+    .ticker-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 6px;
+    }
+
+    .current-ticker {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: #8b949e;
+    }
+
+    .price-display {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 4px;
+    }
+
+    .change-percent {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: #22c55e;
+      margin-bottom: 20px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 16px;
+    }
+
+    .input-label {
+      font-size: 0.85rem;
+      color: #8b949e;
+    }
+
+    .number-input {
+      width: 100%;
+      background-color: #0b0e14;
+      border: 1px solid #2a3245;
+      border-radius: 10px;
+      padding: 12px 16px;
+      font-size: 1rem;
+      color: #ffffff;
+      outline: none;
+      transition: border-color 0.2s;
+    }
+
+    .number-input:focus {
+      border-color: #3b82f6;
+    }
+
+    .cost-summary {
+      background-color: #0d1117;
+      border-radius: 10px;
+      padding: 12px 16px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .cost-label {
+      font-size: 0.9rem;
+      color: #8b949e;
+    }
+
+    .total-cost {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #22c55e;
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .btn {
+      padding: 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: opacity 0.2s;
+    }
+
+    .btn:active {
+      opacity: 0.8;
+    }
+
+    .btn-buy {
+      background-color: #22c55e;
+      color: #ffffff;
+    }
+
+    .btn-sell {
+      background-color: #ef4444;
+      color: #ffffff;
+    }
+
+    /* Bot Toggle Section */
+    .bot-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 12px;
+      border-top: 1px solid #222938;
+    }
+
+    .bot-info h3 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .bot-info p {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    /* Toggle Switch */
+    .switch {
+      position: relative;
+      display: inline-block;
+      width: 48px;
+      height: 26px;
+    }
+
+    .switch input {
+      opacity: 0;
+      width: 0;
+      height: 0;
+    }
+
+    .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: #2a3245;
+      transition: .3s;
+      border-radius: 34px;
+    }
+
+    .slider:before {
+      position: absolute;
+      content: "";
+      height: 20px;
+      width: 20px;
+      left: 3px;
+      bottom: 3px;
+      background-color: white;
+      transition: .3s;
+      border-radius: 50%;
+    }
+
+    input:checked + .slider {
+      background-color: #22c55e;
+    }
+
+    input:checked + .slider:before {
+      transform: translateX(22px);
+    }
+
+    /* Watchlist Section */
+    .watchlist-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid #222938;
+      cursor: pointer;
+    }
+
+    .watchlist-item:last-child {
+      border-bottom: none;
+    }
+
+    .symbol-name {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .company-name {
+      font-size: 0.8rem;
+      color: #8b949e;
+    }
+
+    .price-info {
+      text-align: right;
+    }
+
+    .item-price {
+      font-weight: 700;
+      font-size: 1rem;
+    }
+
+    .item-change {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #22c55e;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="app-container">
+    <!-- Trade Card -->
+    <div class="card">
+      <div class="ticker-header">
+        <h2 class="card-title">Trade</h2>
+        <span class="current-ticker" id="currentSymbol">NKE</span>
+      </div>
+
+      <!-- Single Unit Price -->
+      <div class="price-display" id="unitPriceDisplay">$78.42</div>
+      <div class="change-percent">+2.31%</div>
+
+      <!-- Input Field -->
+      <div class="input-group">
+        <label class="input-label" for="sharesInput">Shares / Amount</label>
+        <input 
+          type="number" 
+          id="sharesInput" 
+          class="number-input" 
+          value="1" 
+          min="1" 
+          step="1"
+        />
+      </div>
+
+      <!-- Live Calculated Total Cost -->
+      <div class="cost-summary">
+        <span class="cost-label">Total Cost:</span>
+        <span class="total-cost" id="totalCostDisplay">$78.42</span>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="button-group">
+        <button class="btn btn-buy" id="buyBtn">BUY</button>
+        <button class="btn btn-sell" id="sellBtn">SELL</button>
+      </div>
+
+      <!-- dinoBot Switch -->
+      <div class="bot-section">
+        <div class="bot-info">
+          <h3>dinoBot</h3>
+          <p>Automated strategy</p>
+        </div>
+        <label class="switch">
+          <input type="checkbox" id="botToggle" checked>
+          <span class="slider"></span>
+        </label>
+      </div>
+    </div>
+
+    <!-- Watchlist Card -->
+    <div class="card">
+      <h2 class="card-title">Watchlist</h2>
+      
+      <div class="watchlist-item" onclick="selectStock('NKE', 78.42, '+2.31%')">
+        <div>
+          <div class="symbol-name">NKE</div>
+          <div class="company-name">Nike Inc.</div>
+        </div>
+        <div class="price-info">
+          <div class="item-price">$78.42</div>
+          <div class="item-change">+2.31%</div>
+        </div>
+      </div>
+
+      <div class="watchlist-item" onclick="selectStock('BTC', 67420, '+1.84%')">
+        <div>
+          <div class="symbol-name">BTC</div>
+          <div class="company-name">Bitcoin</div>
+        </div>
+        <div class="price-info">
+          <div class="item-price">$67,420</div>
+          <div class="item-change">+1.84%</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Current stock price state
+    let currentPrice = 78.42;
+
+    // DOM Elements
+    const sharesInput = document.getElementById('sharesInput');
+    const totalCostDisplay = document.getElementById('totalCostDisplay');
+    const unitPriceDisplay = document.getElementById('unitPriceDisplay');
+    const currentSymbol = document.getElementById('currentSymbol');
+
+    // Function to calculate and update total cost display
+    function calculateTotalCost() {
+      const quantity = parseFloat(sharesInput.value) || 0;
+      const total = currentPrice * quantity;
+      
+      // Format total with commas and 2 decimal places
+      totalCostDisplay.textContent = '$' + total.toLocaleString('en-US', {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2
+      });
+    }
+
+    // Function to handle stock selection from Watchlist
+    function selectStock(symbol, price, change) {
+      currentPrice = price;
+      currentSymbol.textContent = symbol;
+      unitPriceDisplay.textContent = '$' + price.toLocaleString('en-US');
+      calculateTotalCost();
+    }
+
+    // Add event listeners to input field for real-time calculation
+    sharesInput.addEventListener('input', calculateTotalCost);
+    sharesInput.addEventListener('change', calculateTotalCost);
+
+    // Initial calculation on page load
+    calculateTotalCost();
+  </script>
+
+</body>
 </html>
 
-def calculate_total_cost(share_price, quantity):
-    """
-    Calculates total cost given a single share price and number of shares.
-    """
-    return round(share_price * quantity, 2)
-
-
-# Example usage:
-single_share_price = 78.48
-
-# 1 share
-shares_1 = 1
-total_1 = calculate_total_cost(single_share_price, shares_1)
-print(f"{shares_1} share(s) at ${single_share_price} = ${total_1}")
-
-# 2 shares
-shares_2 = 2
-total_2 = calculate_total_cost(single_share_price, shares_2)
-print(f"{shares_2} share(s) at ${single_share_price} = ${total_2}")
-
-# 20 shares
-shares_20 = 20
-total_20 = calculate_total_cost(single_share_price, shares_20)
-print(f"{shares_20} share(s) at ${single_share_price} = ${total_20}")
