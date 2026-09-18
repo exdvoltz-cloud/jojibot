@@ -95,3 +95,30 @@ jobs:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+        let userBalance = 1000.00; // Starting cash
+let currentPrice = 78.42;  // Current asset price
+let sharesOwned = 0;
+
+function handleBuy(sharesToBuy) {
+  let totalCost = sharesToBuy * currentPrice;
+  
+  if (userBalance >= totalCost) {
+    userBalance -= totalCost;
+    sharesOwned += sharesToBuy;
+    console.log(`Bought ${sharesToBuy} share(s). Remaining balance: $${userBalance.toFixed(2)}`);
+  } else {
+    console.log("Insufficient funds.");
+  }
+}
+
+function handleSell(sharesToSell) {
+  if (sharesOwned >= sharesToSell) {
+    let totalRevenue = sharesToSell * currentPrice;
+    userBalance += totalRevenue;
+    sharesOwned -= sharesToSell;
+    console.log(`Sold ${sharesToSell} share(s). New balance: $${userBalance.toFixed(2)}`);
+  } else {
+    console.log("Not enough shares to sell.");
+  }
+}
+
