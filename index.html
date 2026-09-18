@@ -1,231 +1,795 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Stock Trading Bot Dashboard</title>
-    <style>
-        :root {
-            --bg: #0f172a;
-            --card: #1e293b;
-            --accent: #3b82f6;
-            --green: #22c55e;
-            --red: #ef4444;
-            --text: #f8fafc;
-            --text-dim: #94a3b8;
-        }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JojiTrade</title>
 
-        body {
-            font-family: system-ui, -apple-system, sans-serif;
-            background-color: var(--bg);
-            color: var(--text);
-            margin: 0;
-            padding: 24px;
-        }
+<script src="https://unpkg.com/lightweight-charts@4.2.0/dist/lightweight-charts.standalone.production.js"></script>
 
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
 
-        .full-width {
-            grid-column: 1 / -1;
-        }
+body {
+    background: #0b0e11;
+    color: #e8eaed;
+    font-family: Arial, Helvetica, sans-serif;
+    overflow: hidden;
+}
 
-        .card {
-            background-color: var(--card);
-            border-radius: 12px;
-            padding: 20px;
-            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3);
-        }
+/* HEADER */
 
-        h2 {
-            margin-top: 0;
-            font-size: 1.1rem;
-            color: var(--text-dim);
-            text-transform: uppercase;
-            letter-spacing: 0.05em;
-        }
+.header {
+    height: 60px;
+    background: #11151a;
+    border-bottom: 1px solid #252a31;
+    display: flex;
+    align-items: center;
+    padding: 0 18px;
+    gap: 25px;
+}
 
-        .metric {
-            font-size: 2rem;
-            font-weight: bold;
-            margin: 8px 0;
-        }
+.logo {
+    font-size: 22px;
+    font-weight: bold;
+    color: #fff;
+}
 
-        .controls {
-            display: flex;
-            gap: 10px;
-            margin-top: 15px;
-        }
+.logo span {
+    color: #22c55e;
+}
 
-        input, select, button {
-            padding: 10px 14px;
-            border-radius: 6px;
-            border: 1px solid #334155;
-            background: #0f172a;
-            color: var(--text);
-            font-size: 0.95rem;
-        }
+.search {
+    background: #1a1f26;
+    border: 1px solid #303640;
+    border-radius: 7px;
+    padding: 10px 14px;
+    width: 230px;
+    color: white;
+    outline: none;
+}
 
-        button {
-            background-color: var(--accent);
-            cursor: pointer;
-            font-weight: 600;
-            border: none;
-            transition: opacity 0.2s;
-        }
+.header-buttons {
+    margin-left: auto;
+    display: flex;
+    gap: 10px;
+}
 
-        button:hover { opacity: 0.9; }
-        button.stop { background-color: var(--red); }
+.header-btn {
+    background: #1a1f26;
+    border: 1px solid #303640;
+    color: #ddd;
+    padding: 9px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
 
-        .log-box {
-            height: 200px;
-            overflow-y: auto;
-            background: #0f172a;
-            border-radius: 6px;
-            padding: 12px;
-            font-family: monospace;
-            font-size: 0.85rem;
-        }
+.header-btn:hover {
+    background: #252b33;
+}
 
-        .log-entry { margin-bottom: 6px; }
-        .buy { color: var(--green); }
-        .sell { color: var(--red); }
-        .info { color: var(--text-dim); }
-    </style>
+/* MAIN */
+
+.main {
+    display: grid;
+    grid-template-columns: 1fr 300px;
+    height: calc(100vh - 60px);
+}
+
+/* CHART AREA */
+
+.chart-area {
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+}
+
+.symbol-bar {
+    height: 55px;
+    background: #11151a;
+    border-bottom: 1px solid #252a31;
+    display: flex;
+    align-items: center;
+    padding: 0 15px;
+    gap: 20px;
+}
+
+.symbol-name {
+    font-size: 19px;
+    font-weight: bold;
+}
+
+.price {
+    font-size: 16px;
+}
+
+.green {
+    color: #22c55e;
+}
+
+.red {
+    color: #ef4444;
+}
+
+.timeframes {
+    display: flex;
+    gap: 4px;
+}
+
+.timeframes button {
+    background: transparent;
+    border: none;
+    color: #9299a3;
+    padding: 7px 10px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.timeframes button:hover,
+.timeframes button.active {
+    background: #252b33;
+    color: white;
+}
+
+#chart {
+    flex: 1;
+    width: 100%;
+}
+
+/* RIGHT PANEL */
+
+.sidebar {
+    background: #11151a;
+    border-left: 1px solid #252a31;
+    display: flex;
+    flex-direction: column;
+}
+
+.panel-title {
+    padding: 17px;
+    border-bottom: 1px solid #252a31;
+    font-weight: bold;
+}
+
+.watchlist {
+    overflow-y: auto;
+}
+
+.stock {
+    display: flex;
+    justify-content: space-between;
+    padding: 14px 16px;
+    border-bottom: 1px solid #1e2329;
+    cursor: pointer;
+}
+
+.stock:hover {
+    background: #1b2026;
+}
+
+.stock-left strong {
+    display: block;
+    margin-bottom: 5px;
+}
+
+.stock-left small {
+    color: #777f8a;
+}
+
+.stock-right {
+    text-align: right;
+}
+
+.stock-price {
+    font-weight: bold;
+    margin-bottom: 5px;
+}
+
+/* ORDER PANEL */
+
+.order-panel {
+    margin-top: auto;
+    border-top: 1px solid #252a31;
+    padding: 16px;
+}
+
+.order-title {
+    font-size: 16px;
+    margin-bottom: 14px;
+    font-weight: bold;
+}
+
+.order-input {
+    width: 100%;
+    background: #1a1f26;
+    border: 1px solid #303640;
+    color: white;
+    padding: 11px;
+    border-radius: 6px;
+    margin-bottom: 10px;
+    outline: none;
+}
+
+.order-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.buy {
+    background: #16a34a;
+}
+
+.sell {
+    background: #dc2626;
+}
+
+.trade-btn {
+    border: none;
+    color: white;
+    padding: 12px;
+    border-radius: 6px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.trade-btn:hover {
+    opacity: .85;
+}
+
+/* BOTTOM BAR */
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 300px;
+    height: 30px;
+    background: #11151a;
+    border-top: 1px solid #252a31;
+    color: #737b86;
+    font-size: 11px;
+    display: flex;
+    align-items: center;
+    padding-left: 15px;
+}
+
+/* MOBILE */
+
+@media(max-width: 800px) {
+
+    body {
+        overflow: auto;
+    }
+
+    .main {
+        grid-template-columns: 1fr;
+        height: auto;
+    }
+
+    .sidebar {
+        border-left: none;
+        border-top: 1px solid #252a31;
+    }
+
+    #chart {
+        height: 500px;
+        min-height: 500px;
+    }
+
+    .bottom {
+        display: none;
+    }
+
+    .header {
+        gap: 10px;
+    }
+
+    .search {
+        width: 150px;
+    }
+}
+</style>
 </head>
+
 <body>
 
-<div class="container">
-    <!-- Header Controls -->
-    <div class="card full-width">
-        <h2>Bot Configuration</h2>
-        <div class="controls">
-            <input type="text" id="symbol" value="AAPL" placeholder="Ticker (e.g. AAPL)" style="width: 120px;">
-            <input type="text" id="apiKey" placeholder="Finnhub API Key (Optional)">
-            <button id="toggleBtn" onclick="toggleBot()">Start Bot</button>
+<header class="header">
+
+    <div class="logo">
+        Joji<span>Trade</span>
+    </div>
+
+    <input
+        class="search"
+        id="search"
+        placeholder="Search symbol..."
+    >
+
+    <div class="header-buttons">
+        <button class="header-btn">Alerts</button>
+        <button class="header-btn">Settings</button>
+    </div>
+
+</header>
+
+<div class="main">
+
+    <section class="chart-area">
+
+        <div class="symbol-bar">
+
+            <div class="symbol-name" id="symbolName">
+                BTC/USD
+            </div>
+
+            <div class="price">
+                $<span id="currentPrice">67,420.21</span>
+                <span id="change" class="green">+1.42%</span>
+            </div>
+
+            <div class="timeframes">
+                <button>1m</button>
+                <button>5m</button>
+                <button class="active">15m</button>
+                <button>1H</button>
+                <button>4H</button>
+                <button>1D</button>
+            </div>
+
         </div>
-        <p style="font-size: 0.8rem; color: var(--text-dim); margin-top: 10px;">
-            * Get a free API key at <strong>finnhub.io</strong>. Without a key, the bot runs in simulated price mode.
-        </p>
-    </div>
 
-    <!-- Portfolio State -->
-    <div class="card">
-        <h2>Account Balance</h2>
-        <div class="metric" id="cashBalance">$10,000.00</div>
-        <span id="holdingStatus" style="color: var(--text-dim);">Holdings: 0 shares</span>
-    </div>
+        <div id="chart"></div>
 
-    <!-- Market Price -->
-    <div class="card">
-        <h2>Current Price (<span id="tickerDisplay">AAPL</span>)</h2>
-        <div class="metric" id="currentPrice">$0.00</div>
-        <span id="priceChange" style="color: var(--text-dim);">Waiting for data...</span>
-    </div>
+    </section>
 
-    <!-- Live Execution Logs -->
-    <div class="card full-width">
-        <h2>Execution Log</h2>
-        <div class="log-box" id="logBox">
-            <div class="log-entry info">[System] Bot initialized. Press "Start Bot" to begin backtesting strategy.</div>
+
+    <aside class="sidebar">
+
+        <div class="panel-title">
+            Watchlist
         </div>
-    </div>
+
+        <div class="watchlist">
+
+            <div class="stock" onclick="selectStock('BTC/USD',67420.21)">
+                <div class="stock-left">
+                    <strong>BTC/USD</strong>
+                    <small>Bitcoin</small>
+                </div>
+
+                <div class="stock-right">
+                    <div class="stock-price">$67,420</div>
+                    <div class="green">+1.42%</div>
+                </div>
+            </div>
+
+
+            <div class="stock" onclick="selectStock('NKE',78.42)">
+                <div class="stock-left">
+                    <strong>NKE</strong>
+                    <small>Nike</small>
+                </div>
+
+                <div class="stock-right">
+                    <div class="stock-price">$78.42</div>
+                    <div class="red">-0.84%</div>
+                </div>
+            </div>
+
+
+            <div class="stock" onclick="selectStock('AAPL',228.32)">
+                <div class="stock-left">
+                    <strong>AAPL</strong>
+                    <small>Apple</small>
+                </div>
+
+                <div class="stock-right">
+                    <div class="stock-price">$228.32</div>
+                    <div class="green">+0.71%</div>
+                </div>
+            </div>
+
+
+            <div class="stock" onclick="selectStock('TSLA',312.15)">
+                <div class="stock-left">
+                    <strong>TSLA</strong>
+                    <small>Tesla</small>
+                </div>
+
+                <div class="stock-right">
+                    <div class="stock-price">$312.15</div>
+                    <div class="green">+2.31%</div>
+                </div>
+            </div>
+
+
+            <div class="stock" onclick="selectStock('NVDA',176.83)">
+                <div class="stock-left">
+                    <strong>NVDA</strong>
+                    <small>NVIDIA</small>
+                </div>
+
+                <div class="stock-right">
+                    <div class="stock-price">$176.83</div>
+                    <div class="green">+1.95%</div>
+                </div>
+            </div>
+
+        </div>
+
+
+        <div class="order-panel">
+
+            <div class="order-title">
+                Paper Trading
+            </div>
+
+            <input
+                class="order-input"
+                type="number"
+                id="quantity"
+                value="1"
+                min="1"
+                placeholder="Quantity"
+            >
+
+            <input
+                class="order-input"
+                type="number"
+                id="limitPrice"
+                placeholder="Limit Price"
+            >
+
+            <div class="order-buttons">
+
+                <button
+                    class="trade-btn buy"
+                    onclick="trade('BUY')">
+                    BUY
+                </button>
+
+                <button
+                    class="trade-btn sell"
+                    onclick="trade('SELL')">
+                    SELL
+                </button>
+
+            </div>
+
+        </div>
+
+    </aside>
+
 </div>
 
+
+<div class="bottom">
+    Market data is simulated for demonstration purposes • Paper trading only
+</div>
+
+
 <script>
-    let isRunning = false;
-    let timer = null;
-    
-    // Trading state
-    let cash = 10000.00;
-    let shares = 0;
-    let lastPrices = [];
-    
-    // Simple Strategy Settings
-    const SMA_PERIOD = 3; // Uses a 3-period Moving Average trigger for demo speed
 
-    function log(message, type = 'info') {
-        const logBox = document.getElementById('logBox');
-        const entry = document.createElement('div');
-        entry.className = `log-entry ${type}`;
-        const timestamp = new Date().toLocaleTimeString();
-        entry.textContent = `[${timestamp}] ${message}`;
-        logBox.appendChild(entry);
-        logBox.scrollTop = logBox.scrollHeight;
-    }
+/* =========================
+   CHART
+========================= */
 
-    async function fetchPrice(symbol, apiKey) {
-        if (apiKey) {
-            try {
-                const response = await fetch(`https://finnhub.io/api/v1/quote?symbol=${symbol}&token=${apiKey}`);
-                const data = await response.json();
-                if (data.c) return data.c;
-            } catch (err) {
-                log('API error. Falling back to simulated pricing.', 'sell');
+const chart = LightweightCharts.createChart(
+    document.getElementById("chart"),
+    {
+        layout: {
+            background: {
+                color: "#0b0e11"
+            },
+            textColor: "#8b949e"
+        },
+
+        grid: {
+            vertLines: {
+                color: "#171b20"
+            },
+            horzLines: {
+                color: "#171b20"
             }
+        },
+
+        crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal
+        },
+
+        rightPriceScale: {
+            borderColor: "#252a31"
+        },
+
+        timeScale: {
+            borderColor: "#252a31",
+            timeVisible: true
         }
-        
-        // Fallback: Random walk price simulator
-        const basePrice = lastPrices.length ? lastPrices[lastPrices.length - 1] : 175.00;
-        const change = (Math.random() - 0.49) * 2; // Slight upward bias
-        return parseFloat((basePrice + change).toFixed(2));
     }
+);
 
-    async function tick() {
-        const symbol = document.getElementById('symbol').value.toUpperCase();
-        const apiKey = document.getElementById('apiKey').value.trim();
-        document.getElementById('tickerDisplay').textContent = symbol;
 
-        const price = await fetchPrice(symbol, apiKey);
-        document.getElementById('currentPrice').textContent = `$${price.toFixed(2)}`;
-        
-        lastPrices.push(price);
-        if (lastPrices.length > SMA_PERIOD) lastPrices.shift();
+const candleSeries = chart.addCandlestickSeries({
 
-        if (lastPrices.length === SMA_PERIOD) {
-            const sma = lastPrices.reduce((a, b) => a + b, 0) / SMA_PERIOD;
-            
-            // Trading Decision Rules
-            if (price > sma && shares === 0 && cash >= price) {
-                // BUY Signal: Price crossed above SMA
-                shares = Math.floor(cash / price);
-                cash -= shares * price;
-                log(`BUY SIGNAL: Bought ${shares} shares of ${symbol} at $${price.toFixed(2)}`, 'buy');
-            } else if (price < sma && shares > 0) {
-                // SELL Signal: Price fell below SMA
-                cash += shares * price;
-                log(`SELL SIGNAL: Sold ${shares} shares of ${symbol} at $${price.toFixed(2)}`, 'sell');
-                shares = 0;
+    upColor: "#22c55e",
+    downColor: "#ef4444",
+
+    borderUpColor: "#22c55e",
+    borderDownColor: "#ef4444",
+
+    wickUpColor: "#22c55e",
+    wickDownColor: "#ef4444"
+
+});
+
+
+/* =========================
+   GENERATE DEMO DATA
+========================= */
+
+let candles = [];
+
+let startingPrice = 67420;
+
+let now = Math.floor(Date.now() / 1000);
+
+for(let i = 150; i >= 0; i--) {
+
+    let time = now - i * 900;
+
+    let open = startingPrice;
+
+    let movement =
+        (Math.random() - 0.47) * 900;
+
+    let close = open + movement;
+
+    let high =
+        Math.max(open, close)
+        + Math.random() * 500;
+
+    let low =
+        Math.min(open, close)
+        - Math.random() * 500;
+
+    candles.push({
+
+        time: time,
+
+        open: Number(open.toFixed(2)),
+
+        high: Number(high.toFixed(2)),
+
+        low: Number(low.toFixed(2)),
+
+        close: Number(close.toFixed(2))
+
+    });
+
+    startingPrice = close;
+}
+
+
+candleSeries.setData(candles);
+
+chart.timeScale().fitContent();
+
+
+/* =========================
+   RESIZE CHART
+========================= */
+
+window.addEventListener("resize", () => {
+
+    chart.applyOptions({
+
+        width:
+            document.getElementById("chart").clientWidth,
+
+        height:
+            document.getElementById("chart").clientHeight
+
+    });
+
+});
+
+
+/* =========================
+   STOCK SELECTION
+========================= */
+
+function selectStock(symbol, price) {
+
+    document.getElementById("symbolName")
+        .textContent = symbol;
+
+    document.getElementById("currentPrice")
+        .textContent =
+        price.toLocaleString(
+            undefined,
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
             }
-        }
+        );
 
-        // Update UI
-        document.getElementById('cashBalance').textContent = `$${(cash + (shares * price)).toFixed(2)}`;
-        document.getElementById('holdingStatus').textContent = `Cash: $${cash.toFixed(2)} | Holdings: ${shares} shares`;
+    document.getElementById("limitPrice")
+        .value = price.toFixed(2);
+
+    generateNewChart(price);
+}
+
+
+/* =========================
+   NEW CHART
+========================= */
+
+function generateNewChart(basePrice) {
+
+    let data = [];
+
+    let current = basePrice;
+
+    let now = Math.floor(Date.now() / 1000);
+
+    for(let i = 150; i >= 0; i--) {
+
+        let open = current;
+
+        let movement =
+            (Math.random() - 0.48)
+            * basePrice * 0.015;
+
+        let close = open + movement;
+
+        let high =
+            Math.max(open, close)
+            + Math.random()
+            * basePrice * 0.008;
+
+        let low =
+            Math.min(open, close)
+            - Math.random()
+            * basePrice * 0.008;
+
+        data.push({
+
+            time: now - i * 900,
+
+            open: Number(open.toFixed(2)),
+
+            high: Number(high.toFixed(2)),
+
+            low: Number(low.toFixed(2)),
+
+            close: Number(close.toFixed(2))
+
+        });
+
+        current = close;
     }
 
-    function toggleBot() {
-        const btn = document.getElementById('toggleBtn');
-        if (isRunning) {
-            clearInterval(timer);
-            isRunning = false;
-            btn.textContent = 'Start Bot';
-            btn.classList.remove('stop');
-            log('Bot execution paused.', 'info');
-        } else {
-            isRunning = true;
-            btn.textContent = 'Stop Bot';
-            btn.classList.add('stop');
-            log('Bot started. Running strategy check every 3 seconds...', 'info');
-            tick();
-            timer = setInterval(tick, 3000);
-        }
+    candleSeries.setData(data);
+
+    chart.timeScale().fitContent();
+}
+
+
+/* =========================
+   PAPER TRADING
+========================= */
+
+function trade(type) {
+
+    const symbol =
+        document.getElementById("symbolName").textContent;
+
+    const quantity =
+        document.getElementById("quantity").value;
+
+    const price =
+        document.getElementById("limitPrice").value;
+
+    if(!quantity || !price) {
+
+        alert("Enter a quantity and price.");
+
+        return;
     }
+
+    alert(
+        type +
+        " ORDER\n\n" +
+        "Symbol: " + symbol +
+        "\nQuantity: " + quantity +
+        "\nPrice: $" + price
+    );
+}
+
+
+/* =========================
+   SEARCH
+========================= */
+
+document.getElementById("search")
+.addEventListener("keydown", function(event) {
+
+    if(event.key !== "Enter") return;
+
+    let symbol = this.value
+        .trim()
+        .toUpperCase();
+
+    const stocks = {
+
+        "BTC": ["BTC/USD", 67420.21],
+
+        "BTCUSD": ["BTC/USD", 67420.21],
+
+        "NKE": ["NKE", 78.42],
+
+        "AAPL": ["AAPL", 228.32],
+
+        "TSLA": ["TSLA", 312.15],
+
+        "NVDA": ["NVDA", 176.83]
+
+    };
+
+    if(stocks[symbol]) {
+
+        selectStock(
+            stocks[symbol][0],
+            stocks[symbol][1]
+        );
+
+    } else {
+
+        alert(
+            "Symbol not found in demo watchlist."
+        );
+
+    }
+
+});
+
+
+/* =========================
+   SIMULATED LIVE PRICE
+========================= */
+
+setInterval(() => {
+
+    const priceElement =
+        document.getElementById("currentPrice");
+
+    let price =
+        parseFloat(
+            priceElement.textContent
+                .replace(/,/g, "")
+        );
+
+    let movement =
+        (Math.random() - 0.5) * 40;
+
+    price += movement;
+
+    priceElement.textContent =
+        price.toLocaleString(
+            undefined,
+            {
+                minimumFractionDigits: 2,
+                maximumFractionDigits: 2
+            }
+        );
+
+}, 3000);
+
 </script>
 
 </body>
