@@ -3,1843 +3,609 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>R6 Pro Stats</title>
-
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-
+<title>R6 Siege Operator Guide</title>
 <style>
-
-* {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
-
-body {
-    font-family: Arial, Helvetica, sans-serif;
-    background: #080a0d;
-    color: #f1f1f1;
-}
-
-/* HEADER */
-
-header {
-    height: 70px;
-    background: #11151b;
-    border-bottom: 1px solid #292e36;
-
-    display: flex;
-    align-items: center;
-
-    padding: 0 30px;
-    gap: 30px;
-}
-
-.logo {
-    font-size: 25px;
-    font-weight: 900;
-    letter-spacing: 1px;
-}
-
-.logo span {
-    color: #f0b90b;
-}
-
-.search {
-    width: 300px;
-
-    background: #1a1f26;
-    border: 1px solid #343a44;
-
-    padding: 12px 15px;
-
-    border-radius: 6px;
-
-    color: white;
-    outline: none;
-}
-
-.search:focus {
-    border-color: #f0b90b;
-}
-
-.header-right {
-    margin-left: auto;
-    color: #888;
-}
-
-/* NAV */
-
-nav {
-    background: #0e1217;
-
-    padding: 15px 30px;
-
-    display: flex;
-    gap: 10px;
-
-    border-bottom: 1px solid #292e36;
-}
-
-.nav-btn {
-    background: #1a1f26;
-
-    border: none;
-
-    color: #aaa;
-
-    padding: 10px 18px;
-
-    border-radius: 5px;
-
-    cursor: pointer;
-}
-
-.nav-btn:hover,
-.nav-btn.active {
-    background: #f0b90b;
-    color: #000;
-}
-
-/* MAIN */
-
-.container {
-    padding: 25px;
-    max-width: 1500px;
-    margin: auto;
-}
-
-/* TITLE */
-
-.page-title {
-    margin-bottom: 25px;
-}
-
-.page-title h1 {
-    font-size: 30px;
-}
-
-.page-title p {
-    color: #858b94;
-    margin-top: 8px;
-}
-
-/* STAT CARDS */
-
-.stats {
-    display: grid;
-
-    grid-template-columns:
-        repeat(4, 1fr);
-
-    gap: 15px;
-
-    margin-bottom: 25px;
-}
-
-.card {
-    background: #11151b;
-
-    border: 1px solid #292e36;
-
-    padding: 20px;
-
-    border-radius: 8px;
-}
-
-.card-title {
-    color: #858b94;
-    font-size: 13px;
-}
-
-.card-value {
-    font-size: 28px;
-    font-weight: bold;
-
-    margin-top: 10px;
-}
-
-.yellow {
-    color: #f0b90b;
-}
-
-.green {
-    color: #32d583;
-}
-
-.red {
-    color: #ff4d5a;
-}
-
-/* CONTENT GRID */
-
-.grid {
-    display: grid;
-
-    grid-template-columns:
-        2fr 1fr;
-
-    gap: 20px;
-}
-
-/* PANELS */
-
-.panel {
-    background: #11151b;
-
-    border: 1px solid #292e36;
-
-    border-radius: 8px;
-
-    overflow: hidden;
-}
-
-.panel-header {
-    padding: 18px;
-
-    border-bottom: 1px solid #292e36;
-
-    font-size: 17px;
-    font-weight: bold;
-}
-
-.chart-container {
-    padding: 20px;
-
-    height: 350px;
-}
-
-/* OPERATOR TABLE */
-
-.table-container {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
-}
-
-th {
-    text-align: left;
-
-    color: #777f89;
-
-    font-size: 12px;
-
-    padding: 14px;
-
-    background: #0d1014;
-}
-
-td {
-    padding: 15px 14px;
-
-    border-top: 1px solid #20252c;
-
-    font-size: 14px;
-}
-
-tr:hover {
-    background: #171c22;
-}
-
-.operator {
-    font-weight: bold;
-}
-
-.role {
-    font-size: 12px;
-    color: #777f89;
-    margin-top: 4px;
-}
-
-.pick {
-    color: #f0b90b;
-    font-weight: bold;
-}
-
-/* OPERATOR LIST */
-
-.operator-list {
-    padding: 10px 0;
-}
-
-.operator-item {
-    display: flex;
-
-    align-items: center;
-
-    justify-content: space-between;
-
-    padding: 15px 18px;
-
-    border-bottom: 1px solid #20252c;
-}
-
-.operator-item:last-child {
-    border-bottom: none;
-}
-
-.operator-name {
-    font-weight: bold;
-}
-
-.operator-role {
-    color: #777f89;
-
-    font-size: 12px;
-
-    margin-top: 4px;
-}
-
-.percent {
-    color: #f0b90b;
-
-    font-weight: bold;
-}
-
-/* FILTER */
-
-.filter {
-    display: flex;
-
-    gap: 10px;
-
-    margin-bottom: 15px;
-}
-
-.filter button {
-    background: #1a1f26;
-
-    color: #aaa;
-
-    border: 1px solid #303640;
-
-    padding: 9px 15px;
-
-    border-radius: 5px;
-
-    cursor: pointer;
-}
-
-.filter button:hover,
-.filter button.selected {
-    background: #f0b90b;
-    color: black;
-}
-
-/* FOOTER */
-
-footer {
-    text-align: center;
-
-    color: #626a74;
-
-    padding: 30px;
-
-    font-size: 12px;
-}
-
-/* MOBILE */
-
-@media(max-width: 900px) {
-
-    .stats {
-        grid-template-columns:
-            repeat(2, 1fr);
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
     }
-
-    .grid {
-        grid-template-columns: 1fr;
+    body {
+        background: #0b0f14;
+        color: white;
     }
-
     header {
-        padding: 0 15px;
+        background: linear-gradient(135deg, #111923, #182432);
+        padding: 35px 20px;
+        text-align: center;
+        border-bottom: 2px solid #2d3947;
     }
-
-    .search {
-        width: 180px;
+    header h1 {
+        font-size: 42px;
+        letter-spacing: 2px;
     }
-}
-
-@media(max-width: 600px) {
-
+    header p {
+        color: #9ba8b6;
+        margin-top: 10px;
+    }
+    .controls {
+        max-width: 1200px;
+        margin: 25px auto;
+        padding: 0 20px;
+    }
+    #search {
+        width: 100%;
+        padding: 16px;
+        border-radius: 8px;
+        border: 1px solid #344252;
+        background: #121922;
+        color: white;
+        font-size: 16px;
+        outline: none;
+    }
+    .filters {
+        display: flex;
+        gap: 10px;
+        flex-wrap: wrap;
+        margin-top: 15px;
+    }
+    button {
+        background: #182330;
+        color: white;
+        border: 1px solid #344252;
+        padding: 12px 18px;
+        border-radius: 7px;
+        cursor: pointer;
+        transition: .2s;
+    }
+    button:hover,
+    button.active {
+        background: #3c82f6;
+        border-color: #3c82f6;
+    }
+    .grid {
+        max-width: 1200px;
+        margin: auto;
+        padding: 10px 20px 50px;
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 18px;
+    }
+    .card {
+        background: #121922;
+        border: 1px solid #263341;
+        border-radius: 12px;
+        padding: 20px;
+        transition: .2s;
+    }
+    .card:hover {
+        transform: translateY(-4px);
+        border-color: #3c82f6;
+        box-shadow: 0 10px 30px rgba(0,0,0,.3);
+    }
+    .operator-name {
+        font-size: 25px;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+    .side {
+        display: inline-block;
+        padding: 5px 9px;
+        border-radius: 5px;
+        font-size: 12px;
+        font-weight: bold;
+        margin: 7px 0 15px;
+    }
+    .attacker {
+        background: #693535;
+    }
+    .defender {
+        background: #31547a;
+    }
+    .section {
+        margin-top: 14px;
+    }
+    .section-title {
+        color: #7fa8dc;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 5px;
+    }
+    .ability {
+        color: #fff;
+        font-weight: bold;
+    }
+    .description {
+        color: #aeb9c5;
+        line-height: 1.5;
+        font-size: 14px;
+    }
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 5px;
+        margin-top: 8px;
+    }
+    .tag {
+        background: #202c38;
+        color: #b8c8d8;
+        padding: 5px 8px;
+        border-radius: 5px;
+        font-size: 11px;
+    }
     .stats {
-        grid-template-columns: 1fr;
+        display: flex;
+        gap: 15px;
+        margin-top: 15px;
+        border-top: 1px solid #263341;
+        padding-top: 12px;
     }
-
-    .header-right {
-        display: none;
+    .stat {
+        flex: 1;
+        text-align: center;
     }
-
-    nav {
-        overflow-x: auto;
+    .stat-label {
+        display: block;
+        color: #7f8d9c;
+        font-size: 11px;
+        text-transform: uppercase;
     }
-
-    .container {
-        padding: 15px;
+    .stat-value {
+        font-size: 16px;
+        font-weight: bold;
+        margin-top: 4px;
     }
-}
-
+    .gadget {
+        color: #d9e3ed;
+        font-size: 14px;
+        margin-top: 3px;
+    }
+    .empty {
+        text-align: center;
+        color: #8794a3;
+        padding: 60px 20px;
+        grid-column: 1 / -1;
+    }
+    footer {
+        text-align: center;
+        padding: 30px;
+        color: #687686;
+        border-top: 1px solid #263341;
+    }
+    @media(max-width:600px) {
+        header h1 {
+            font-size: 30px;
+        }
+        .grid {
+            grid-template-columns: 1fr;
+        }
+    }
 </style>
 </head>
-
 <body>
-
-
 <header>
-
-    <div class="logo">
-        R6<span>PRO</span>
-    </div>
-
+    <h1>R6 SIEGE OPERATOR GUIDE</h1>
+    <p>Operator abilities, specialties, gadgets and playstyle information</p>
+</header>
+<div class="controls">
     <input
         id="search"
-        class="search"
-        placeholder="Search operator..."
-        onkeyup="searchOperators()"
+        type="text"
+        placeholder="Search an operator, ability, or specialty..."
+        oninput="renderOperators()"
     >
-
-    <div class="header-right">
-        PRO LEAGUE STATS
+    <div class="filters">
+        <button class="active" onclick="setSide('All', this)">All</button>
+        <button onclick="setSide('Attacker', this)">Attackers</button>
+        <button onclick="setSide('Defender', this)">Defenders</button>
     </div>
-
-</header>
-
-
-<nav>
-
-    <button
-        class="nav-btn active"
-        onclick="filterOperators('all', this)">
-        All
-    </button>
-
-    <button
-        class="nav-btn"
-        onclick="filterOperators('attacker', this)">
-        Attackers
-    </button>
-
-    <button
-        class="nav-btn"
-        onclick="filterOperators('defender', this)">
-        Defenders
-    </button>
-
-</nav>
-
-
-<main class="container">
-
-
-<div class="page-title">
-
-    <h1>Rainbow Six Siege Pro Stats</h1>
-
-    <p>
-        Operator popularity, pick rates, bans and competitive statistics.
-    </p>
-
+    <div class="filters">
+        <button onclick="setSpecialty('All', this)">All Specialties</button>
+        <button onclick="setSpecialty('Intel', this)">Intel</button>
+        <button onclick="setSpecialty('Support', this)">Support</button>
+        <button onclick="setSpecialty('Front Line', this)">Front Line</button>
+        <button onclick="setSpecialty('Map Control', this)">Map Control</button>
+        <button onclick="setSpecialty('Anti-Gadget', this)">Anti-Gadget</button>
+        <button onclick="setSpecialty('Anti-Entry', this)">Anti-Entry</button>
+        <button onclick="setSpecialty('Trapper', this)">Trapper</button>
+    </div>
 </div>
-
-
-<!-- TOP STATS -->
-
-<section class="stats">
-
-    <div class="card">
-
-        <div class="card-title">
-            MOST PICKED OPERATOR
-        </div>
-
-        <div
-            class="card-value yellow">
-            Smoke
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-title">
-            HIGHEST PICK RATE
-        </div>
-
-        <div
-            class="card-value">
-            42.8%
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-title">
-            MOST BANNED
-        </div>
-
-        <div
-            class="card-value red">
-            Fenrir
-        </div>
-
-    </div>
-
-
-    <div class="card">
-
-        <div class="card-title">
-            PRO MATCHES
-        </div>
-
-        <div
-            class="card-value green">
-            12,482
-        </div>
-
-    </div>
-
-</section>
-
-
-<div class="grid">
-
-
-<!-- LEFT SIDE -->
-
-<div>
-
-
-<div class="panel">
-
-    <div class="panel-header">
-        Operator Statistics
-    </div>
-
-
-    <div style="padding:15px">
-
-        <div class="filter">
-
-            <button
-                class="selected"
-                onclick="filterOperators('all', this)">
-                All
-            </button>
-
-            <button
-                onclick="filterOperators('attacker', this)">
-                Attack
-            </button>
-
-            <button
-                onclick="filterOperators('defender', this)">
-                Defense
-            </button>
-
-        </div>
-
-    </div>
-
-
-    <div class="table-container">
-
-        <table>
-
-            <thead>
-
-                <tr>
-
-                    <th>OPERATOR</th>
-                    <th>ROLE</th>
-                    <th>PICK RATE</th>
-                    <th>BAN RATE</th>
-                    <th>WIN RATE</th>
-                    <th>K/D</th>
-
-                </tr>
-
-            </thead>
-
-
-            <tbody id="operatorTable">
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Smoke
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">42.8%</td>
-
-<td>18.2%</td>
-
-<td class="green">51.7%</td>
-
-<td>1.14</td>
-
-</tr>
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Azami
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">39.4%</td>
-
-<td>31.5%</td>
-
-<td class="green">52.1%</td>
-
-<td>1.09</td>
-
-</tr>
-
-
-<tr data-role="attacker">
-
-<td>
-    <div class="operator">
-        Ace
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Attacker
-    </div>
-</td>
-
-<td class="pick">37.9%</td>
-
-<td>24.8%</td>
-
-<td class="green">51.3%</td>
-
-<td>1.07</td>
-
-</tr>
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Wamai
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">35.6%</td>
-
-<td>20.1%</td>
-
-<td>50.8%</td>
-
-<td>1.05</td>
-
-</tr>
-
-
-<tr data-role="attacker">
-
-<td>
-    <div class="operator">
-        Twitch
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Attacker
-    </div>
-</td>
-
-<td class="pick">33.4%</td>
-
-<td>15.2%</td>
-
-<td class="green">52.4%</td>
-
-<td>1.12</td>
-
-</tr>
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Mute
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">31.8%</td>
-
-<td>17.6%</td>
-
-<td>50.5%</td>
-
-<td>1.02</td>
-
-</tr>
-
-
-<tr data-role="attacker">
-
-<td>
-    <div class="operator">
-        Dokkaebi
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Attacker
-    </div>
-</td>
-
-<td class="pick">29.7%</td>
-
-<td>22.3%</td>
-
-<td>51.1%</td>
-
-<td>1.08</td>
-
-</tr>
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Warden
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">28.4%</td>
-
-<td>26.7%</td>
-
-<td>49.8%</td>
-
-<td>1.01</td>
-
-</tr>
-
-
-<tr data-role="attacker">
-
-<td>
-    <div class="operator">
-        Buck
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Attacker
-    </div>
-</td>
-
-<td class="pick">27.2%</td>
-
-<td>12.4%</td>
-
-<td class="green">52.0%</td>
-
-<td>1.10</td>
-
-</tr>
-
-
-<tr data-role="defender">
-
-<td>
-    <div class="operator">
-        Goyo
-    </div>
-</td>
-
-<td>
-    <div class="role">
-        Defender
-    </div>
-</td>
-
-<td class="pick">25.9%</td>
-
-<td>19.8%</td>
-
-<td>50.2%</td>
-
-<td>1.03</td>
-
-</tr>
-
-
-            </tbody>
-
-        </table>
-
-    </div>
-
-</div>
-
-
-<!-- CHART -->
-
-<div
-    class="panel"
-    style="margin-top:20px">
-
-    <div class="panel-header">
-        Operator Pick Rate
-    </div>
-
-    <div class="chart-container">
-
-        <canvas id="pickChart"></canvas>
-
-    </div>
-
-</div>
-
-
-</div>
-
-
-<!-- RIGHT SIDE -->
-
-<div>
-
-
-<div class="panel">
-
-    <div class="panel-header">
-        Popular Operators
-    </div>
-
-
-    <div class="operator-list">
-
-
-        <div class="operator-item">
-
-            <div>
-                <div class="operator-name">
-                    Smoke
-                </div>
-
-                <div class="operator-role">
-                    Defender
-                </div>
-            </div>
-
-            <div class="percent">
-                42.8%
-            </div>
-
-        </div>
-
-
-        <div class="operator-item">
-
-            <div>
-                <div class="operator-name">
-                    Azami
-                </div>
-
-                <div class="operator-role">
-                    Defender
-                </div>
-            </div>
-
-            <div class="percent">
-                39.4%
-            </div>
-
-        </div>
-
-
-        <div class="operator-item">
-
-            <div>
-                <div class="operator-name">
-                    Ace
-                </div>
-
-                <div class="operator-role">
-                    Attacker
-                </div>
-            </div>
-
-            <div class="percent">
-                37.9%
-            </div>
-
-        </div>
-
-
-        <div class="operator-item">
-
-            <div>
-                <div class="operator-name">
-                    Wamai
-                </div>
-
-                <div class="operator-role">
-                    Defender
-                </div>
-            </div>
-
-            <div class="percent">
-                35.6%
-            </div>
-
-        </div>
-
-
-        <div class="operator-item">
-
-            <div>
-                <div class="operator-name">
-                    Twitch
-                </div>
-
-                <div class="operator-role">
-                    Attacker
-                </div>
-            </div>
-
-            <div class="percent">
-                33.4%
-            </div>
-
-        </div>
-
-
-    </div>
-
-</div>
-
-
-<div
-    class="panel"
-    style="margin-top:20px">
-
-    <div class="panel-header">
-        Attack vs Defense
-    </div>
-
-    <div class="chart-container">
-
-        <canvas id="roleChart"></canvas>
-
-    </div>
-
-</div>
-
-
-</div>
-
-</div>
-
-
-</main>
-
-
+<div id="operatorGrid" class="grid"></div>
 <footer>
-
-    R6 Pro Stats Dashboard • Sample data for demonstration
-
+    Rainbow Six Siege Operator Reference • Fan-made project
 </footer>
-
-
 <script>
-
-/* =========================
-   PICK RATE CHART
-========================= */
-
-const pickChart =
-new Chart(
-    document.getElementById("pickChart"),
-    {
-
-        type: "bar",
-
-        data: {
-
-            labels: [
-                "Smoke",
-                "Azami",
-                "Ace",
-                "Wamai",
-                "Twitch",
-                "Mute",
-                "Dokkaebi",
-                "Warden",
-                "Buck",
-                "Goyo"
-            ],
-
-            datasets: [{
-
-                label: "Pick Rate %",
-
-                data: [
-                    42.8,
-                    39.4,
-                    37.9,
-                    35.6,
-                    33.4,
-                    31.8,
-                    29.7,
-                    28.4,
-                    27.2,
-                    25.9
-                ]
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-                legend: {
-                    display: false
-                }
-
-            },
-
-            scales: {
-
-                y: {
-
-                    beginAtZero: true,
-
-                    ticks: {
-                        color: "#858b94"
-                    },
-
-                    grid: {
-                        color: "#22272e"
-                    }
-
-                },
-
-                x: {
-
-                    ticks: {
-                        color: "#858b94"
-                    },
-
-                    grid: {
-                        display: false
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-);
-
-
-/* =========================
-   ATTACK / DEFENSE CHART
-========================= */
-
-new Chart(
-
-    document.getElementById("roleChart"),
-
-    {
-
-        type: "doughnut",
-
-        data: {
-
-            labels: [
-                "Attackers",
-                "Defenders"
-            ],
-
-            datasets: [{
-
-                data: [
-                    48,
-                    52
-                ]
-
-            }]
-
-        },
-
-        options: {
-
-            responsive: true,
-
-            maintainAspectRatio: false,
-
-            plugins: {
-
-                legend: {
-
-                    position: "bottom",
-
-                    labels: {
-                        color: "#aaa"
-                    }
-
-                }
-
-            }
-
-        }
-
-    }
-
-);
-
-
-/* =========================
-   FILTER OPERATORS
-========================= */
-
-function filterOperators(role, button) {
-
-    const rows =
-        document.querySelectorAll(
-            "#operatorTable tr"
-        );
-
-    rows.forEach(row => {
-
-        if(role === "all") {
-
-            row.style.display = "";
-
-        }
-
-        else {
-
-            if(
-                row.dataset.role === role
-            ) {
-
-                row.style.display = "";
-
-            } else {
-
-                row.style.display = "none";
-
-            }
-
-        }
-
-    });
-
-
-    document
-        .querySelectorAll(
-            ".filter button"
-        )
-        .forEach(btn => {
-
-            btn.classList.remove(
-                "selected"
-            );
-
-        });
-
-
-    if(button) {
-
-        button.classList.add(
-            "selected"
-        );
-
-    }
-
+const operators = [
+/* ================= ATTACKERS ================= */
+{
+    name:"Iana",
+    side:"Attacker",
+    specialties:["Front Line","Intel"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Gemini Replicator",
+    description:"Creates a remotely controlled holographic copy that can gather information and create confusion.",
+    gadgets:["Impact EMP Grenade","Smoke Grenade"]
+},
+{
+    name:"Sens",
+    side:"Attacker",
+    specialties:["Support","Map Control"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"R.O.U. Projector System",
+    description:"Creates a moving screen that blocks lines of sight while still allowing physical objects to pass through.",
+    gadgets:["Claymore","Frag Grenade","Hard Breach Charge"]
+},
+{
+    name:"Grim",
+    side:"Attacker",
+    specialties:["Map Control","Front Line"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Kawan Hive Launcher",
+    description:"Deploys a swarm that tracks opponents who enter its area.",
+    gadgets:["Claymore","Hard Breach Charge","Impact EMP Grenade"]
+},
+{
+    name:"Ying",
+    side:"Attacker",
+    specialties:["Front Line","Map Control"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Candela",
+    description:"Deploys flash devices that can be thrown or attached to surfaces.",
+    gadgets:["Hard Breach Charge","Smoke Grenade"]
+},
+{
+    name:"IQ",
+    side:"Attacker",
+    specialties:["Intel","Support"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Electronics Detector",
+    description:"Detects electronic devices through surfaces at close range.",
+    gadgets:["Breach Charge","Frag Grenade","Claymore"]
+},
+{
+    name:"Finka",
+    side:"Attacker",
+    specialties:["Front Line","Support"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Adrenal Surge",
+    description:"Provides the team with a temporary boost and can assist teammates who are down.",
+    gadgets:["Frag Grenade","Smoke Grenade","Stun Grenade"]
+},
+{
+    name:"Striker",
+    side:"Attacker",
+    specialties:["Support"],
+    health:3,
+    speed:3,
+    difficulty:1,
+    ability:"Recruit Equipment",
+    description:"A flexible attacker with access to a variety of team-support equipment.",
+    gadgets:["Multiple attacker gadgets"]
+},
+{
+    name:"Sledge",
+    side:"Attacker",
+    specialties:["Front Line","Map Control"],
+    health:3,
+    speed:3,
+    difficulty:1,
+    ability:"Breaching Hammer",
+    description:"Uses a breaching hammer to quickly create openings through soft surfaces.",
+    gadgets:["Fragmentation Grenade","Stun Grenade"]
+},
+{
+    name:"Thatcher",
+    side:"Attacker",
+    specialties:["Anti-Gadget","Support"],
+    health:3,
+    speed:3,
+    difficulty:2,
+    ability:"EMP Grenade",
+    description:"Disables nearby electronic defensive equipment temporarily.",
+    gadgets:["Breach Charge","Claymore"]
+},
+{
+    name:"Ash",
+    side:"Attacker",
+    specialties:["Front Line","Anti-Gadget"],
+    health:1,
+    speed:3,
+    difficulty:2,
+    ability:"Breaching Rounds",
+    description:"Fires specialized projectiles that create openings and destroy certain obstacles.",
+    gadgets:["Breach Charge","Claymore"]
+},
+{
+    name:"Thermite",
+    side:"Attacker",
+    specialties:["Support","Anti-Gadget"],
+    health:2,
+    speed:2,
+    difficulty:1,
+    ability:"Exothermic Charge",
+    description:"Creates large openings in reinforced surfaces.",
+    gadgets:["Smoke Grenade","Hard Breach Charge"]
+},
+{
+    name:"Twitch",
+    side:"Attacker",
+    specialties:["Anti-Gadget","Support"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Shock Drone",
+    description:"Uses specialized drones to provide information and interact with defensive equipment.",
+    gadgets:["Claymore","Smoke Grenade"]
+},
+/* ================= DEFENDERS ================= */
+{
+    name:"Sentry",
+    side:"Defender",
+    specialties:["Support"],
+    health:3,
+    speed:3,
+    difficulty:1,
+    ability:"Recruit Equipment",
+    description:"A flexible defender with access to a broad selection of defensive equipment.",
+    gadgets:["Barbed Wire","Bulletproof Camera","Deployable Shield","Observation Blocker","Impact Grenade","Nitro Cell","Proximity Alarm"]
+},
+{
+    name:"Ela",
+    side:"Defender",
+    specialties:["Crowd Control","Trapper"],
+    health:3,
+    speed:3,
+    difficulty:3,
+    ability:"Grzmot Mine",
+    description:"Proximity mines that impair opponents caught within their effect.",
+    gadgets:["Barbed Wire","Deployable Shield","Impact Grenade"]
+},
+{
+    name:"Kaid",
+    side:"Defender",
+    specialties:["Anti-Entry","Anti-Gadget"],
+    health:3,
+    speed:1,
+    difficulty:2,
+    ability:"Rtila Electroclaw",
+    description:"Electrifies nearby reinforced surfaces and certain defensive objects.",
+    gadgets:["Barbed Wire","Nitro Cell","Observation Blocker"]
+},
+{
+    name:"Doc",
+    side:"Defender",
+    specialties:["Support"],
+    health:3,
+    speed:3,
+    difficulty:2,
+    ability:"Stim Pistol",
+    description:"Can restore health to teammates from a distance and assist downed teammates.",
+    gadgets:["Bulletproof Camera","Barbed Wire"]
+},
+{
+    name:"Echo",
+    side:"Defender",
+    specialties:["Intel","Crowd Control"],
+    health:3,
+    speed:2,
+    difficulty:3,
+    ability:"Yokai",
+    description:"Uses specialized drones to provide surveillance and disrupt opponents.",
+    gadgets:["Impact Grenade","Deployable Shield"]
+},
+{
+    name:"Mute",
+    side:["Anti-Gadget","Intel"],
+    health:2,
+    speed:2,
+    difficulty:1,
+    ability:"Signal Disruptor",
+    description:"Disrupts certain electronic devices within its range.",
+    gadgets:["Nitro Cell","Bulletproof Camera"]
+},
+{
+    name:"Smoke",
+    side:"Defender",
+    specialties:["Crowd Control","Anti-Entry"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Remote Gas Grenade",
+    description:"Creates an area that temporarily denies access.",
+    gadgets:["Barbed Wire","Proximity Alarm"]
+},
+{
+    name:"Castle",
+    side:"Defender",
+    specialties:["Support","Map Control"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Armor Panel",
+    description:"Reinforces selected doorways and windows with protective panels.",
+    gadgets:["Bulletproof Camera","Proximity Alarm"]
+},
+{
+    name:"Pulse",
+    side:"Defender",
+    specialties:["Intel"],
+    health:1,
+    speed:3,
+    difficulty:2,
+    ability:"Heartbeat Sensor",
+    description:"Detects opponents through surfaces at close range.",
+    gadgets:["Nitro Cell","Barbed Wire"]
+},
+{
+    name:"Jäger",
+    side:"Defender",
+    specialties:["Anti-Gadget","Support"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Active Defense",
+    description:"Deploys defensive systems designed to intercept certain incoming projectiles.",
+    gadgets:["Barbed Wire","Bulletproof Camera"]
+},
+{
+    name:"Kapkan",
+    side:"Defender",
+    specialties:["Trapper","Anti-Entry"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Entry Denial Device",
+    description:"Places hidden entry traps around doors and windows.",
+    gadgets:["Nitro Cell","Bulletproof Camera"]
+},
+{
+    name:"Frost",
+    side:"Defender",
+    specialties:["Trapper","Support"],
+    health:2,
+    speed:2,
+    difficulty:2,
+    ability:"Welcome Mat",
+    description:"Places traps that can incapacitate opponents who step on them.",
+    gadgets:["Bulletproof Camera","Deployable Shield"]
 }
-
-
-/* =========================
-   SEARCH
-========================= */
-
-function searchOperators() {
-
+];
+let currentSide = "All";
+let currentSpecialty = "All";
+function setSide(side, button) {
+    currentSide = side;
+    document.querySelectorAll(".filters button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+    button.classList.add("active");
+    renderOperators();
+}
+function setSpecialty(specialty, button) {
+    currentSpecialty = specialty;
+    document.querySelectorAll(".filters button").forEach(btn => {
+        btn.classList.remove("active");
+    });
+    button.classList.add("active");
+    renderOperators();
+}
+function renderOperators() {
+    const grid = document.getElementById("operatorGrid");
     const search =
-        document
-        .getElementById("search")
+        document.getElementById("search")
         .value
         .toLowerCase();
-
-    const rows =
-        document.querySelectorAll(
-            "#operatorTable tr"
-        );
-
-    rows.forEach(row => {
-
-        const name =
-            row
-            .querySelector(".operator")
-            .textContent
-            .toLowerCase();
-
-        if(
-            name.includes(search)
-        ) {
-
-            row.style.display = "";
-
-        } else {
-
-            row.style.display = "none";
-
-        }
-
+    const filtered = operators.filter(operator => {
+        const matchesSide =
+            currentSide === "All" ||
+            operator.side === currentSide;
+        const matchesSpecialty =
+            currentSpecialty === "All" ||
+            operator.specialties.includes(currentSpecialty);
+        const searchable =
+            operator.name.toLowerCase().includes(search) ||
+            operator.ability.toLowerCase().includes(search) ||
+            operator.description.toLowerCase().includes(search) ||
+            operator.specialties.join(" ").toLowerCase().includes(search);
+        return matchesSide &&
+               matchesSpecialty &&
+               searchable;
     });
-
-}
-
-</script>
-
-</body>
-</html>
-<!-- =========================
-     PRO LOADOUTS
-========================= -->
-
-<div class="panel" style="margin-top:20px;">
-
-    <div class="panel-header">
-        🎯 Pro Operator Loadouts
-    </div>
-
-    <div style="padding:15px;">
-
-        <input
-            id="loadoutSearch"
-            class="search"
-            style="width:100%; margin-bottom:15px;"
-            placeholder="Search operator..."
-            onkeyup="searchLoadouts()"
-        >
-
-        <div class="filter">
-
-            <button
-                class="selected"
-                onclick="filterLoadouts('all', this)">
-                All
-            </button>
-
-            <button
-                onclick="filterLoadouts('attacker', this)">
-                Attackers
-            </button>
-
-            <button
-                onclick="filterLoadouts('defender', this)">
-                Defenders
-            </button>
-
-        </div>
-
-    </div>
-
-    <div id="loadoutGrid" class="loadout-grid"></div>
-
-</div>
-
-
-<style>
-
-/* =========================
-   LOADOUT CARDS
-========================= */
-
-.loadout-grid {
-
-    display: grid;
-
-    grid-template-columns:
-        repeat(3, 1fr);
-
-    gap: 15px;
-
-    padding: 0 15px 20px;
-
-}
-
-.loadout-card {
-
-    background: #0d1116;
-
-    border: 1px solid #292e36;
-
-    border-radius: 8px;
-
-    padding: 18px;
-
-    transition: .2s;
-
-}
-
-.loadout-card:hover {
-
-    border-color: #f0b90b;
-
-    transform: translateY(-2px);
-
-}
-
-.loadout-name {
-
-    font-size: 19px;
-
-    font-weight: bold;
-
-    margin-bottom: 4px;
-
-}
-
-.loadout-role {
-
-    color: #f0b90b;
-
-    font-size: 12px;
-
-    margin-bottom: 15px;
-
-}
-
-.loadout-section {
-
-    margin-top: 12px;
-
-}
-
-.loadout-label {
-
-    color: #777f89;
-
-    font-size: 11px;
-
-    text-transform: uppercase;
-
-    margin-bottom: 5px;
-
-}
-
-.loadout-value {
-
-    background: #171c22;
-
-    padding: 9px;
-
-    border-radius: 5px;
-
-    font-size: 13px;
-
-}
-
-.pro-badge {
-
-    display: inline-block;
-
-    background: #f0b90b;
-
-    color: #000;
-
-    font-size: 10px;
-
-    font-weight: bold;
-
-    padding: 4px 7px;
-
-    border-radius: 4px;
-
-    margin-top: 12px;
-
-}
-
-
-/* MOBILE */
-
-@media(max-width:900px) {
-
-    .loadout-grid {
-
-        grid-template-columns:
-            repeat(2, 1fr);
-
+    if(filtered.length === 0) {
+        grid.innerHTML = `
+            <div class="empty">
+                <h2>No operators found</h2>
+                <p>Try another search or filter.</p>
+            </div>
+        `;
+        return;
     }
-
-}
-
-@media(max-width:600px) {
-
-    .loadout-grid {
-
-        grid-template-columns: 1fr;
-
-    }
-
-}
-
-</style>
-
-
-<script>
-
-/* =========================
-   PRO LOADOUT DATA
-========================= */
-
-/*
-   These are example loadout entries.
-   Update them whenever the game changes.
-*/
-
-const loadouts = [
-
-    {
-        name: "Ace",
-        role: "Attacker",
-        weapon: "AK-12",
-        sight: "1.5x",
-        barrel: "Muzzle Brake",
-        grip: "Vertical Grip",
-        secondary: "P9",
-        gadget: "Breach Charge"
-    },
-
-    {
-        name: "Ash",
-        role: "Attacker",
-        weapon: "R4-C",
-        sight: "1.5x",
-        barrel: "Flash Hider",
-        grip: "Vertical Grip",
-        secondary: "5.7 USG",
-        gadget: "Breach Charge"
-    },
-
-    {
-        name: "Buck",
-        role: "Attacker",
-        weapon: "C8-SFW",
-        sight: "1.5x",
-        barrel: "Flash Hider",
-        grip: "Vertical Grip",
-        secondary: "MK1 9mm",
-        gadget: "Hard Breach Charge"
-    },
-
-    {
-        name: "Twitch",
-        role: "Attacker",
-        weapon: "F2",
-        sight: "1.5x",
-        barrel: "Flash Hider",
-        grip: "Vertical Grip",
-        secondary: "P9",
-        gadget: "Claymore"
-    },
-
-    {
-        name: "Dokkaebi",
-        role: "Attacker",
-        weapon: "SMG-12",
-        sight: "1.5x",
-        barrel: "Compensator",
-        grip: "Vertical Grip",
-        secondary: "C75 Auto",
-        gadget: "Smoke Grenade"
-    },
-
-    {
-        name: "Sledge",
-        role: "Attacker",
-        weapon: "L85A2",
-        sight: "1.5x",
-        barrel: "Flash Hider",
-        grip: "Vertical Grip",
-        secondary: "SMG-11",
-        gadget: "Frag Grenade"
-    },
-
-    {
-        name: "Smoke",
-        role: "Defender",
-        weapon: "FMG-9",
-        sight: "1.5x",
-        barrel: "Suppressor",
-        grip: "Vertical Grip",
-        secondary: "SMG-11",
-        gadget: "Deployable Shield"
-    },
-
-    {
-        name: "Mute",
-        role: "Defender",
-        weapon: "MP5K",
-        sight: "1.5x",
-        barrel: "Compensator",
-        grip: "Vertical Grip",
-        secondary: "SMG-11",
-        gadget: "Nitro Cell"
-    },
-
-    {
-        name: "Azami",
-        role: "Defender",
-        weapon: "9x19VSN",
-        sight: "1.5x",
-        barrel: "Flash Hider",
-        grip: "Vertical Grip",
-        secondary: "D-50",
-        gadget: "Impact Grenade"
-    },
-
-    {
-        name: "Wamai",
-        role: "Defender",
-        weapon: "MP5",
-        sight: "1.5x",
-        barrel: "Compensator",
-        grip: "Vertical Grip",
-        secondary: "P12",
-        gadget: "Impact Grenade"
-    },
-
-    {
-        name: "Goyo",
-        role: "Defender",
-        weapon: "Vector .45 ACP",
-        sight: "1.5x",
-        barrel: "Compensator",
-        grip: "Vertical Grip",
-        secondary: "P229",
-        gadget: "Impact Grenade"
-    },
-
-    {
-        name: "Warden",
-        role: "Defender",
-        weapon: "MPX",
-        sight: "1.5x",
-        barrel: "Compensator",
-        grip: "Vertical Grip",
-        secondary: "SMG-12",
-        gadget: "Nitro Cell"
-    },
-
-    {
-        name: "Smoke",
-        role: "Defender",
-        weapon: "M590A1",
-        sight: "Iron Sight",
-        barrel: "N/A",
-        grip: "N/A",
-        secondary: "SMG-11",
-        gadget: "Deployable Shield"
-    }
-
-];
-
-
-/* =========================
-   DISPLAY LOADOUTS
-========================= */
-
-function displayLoadouts(data) {
-
-    const grid =
-        document.getElementById(
-            "loadoutGrid"
-        );
-
-    grid.innerHTML = "";
-
-    data.forEach(operator => {
-
-        const card =
-            document.createElement("div");
-
-        card.className =
-            "loadout-card";
-
-        card.dataset.role =
-            operator.role.toLowerCase();
-
-        card.innerHTML = `
-
-            <div class="loadout-name">
+    grid.innerHTML = filtered.map(operator => {
+        const sideClass =
+            operator.side === "Attacker"
+            ? "attacker"
+            : "defender";
+        return `
+        <div class="card">
+            <div class="operator-name">
                 ${operator.name}
             </div>
-
-            <div class="loadout-role">
-                ${operator.role}
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Primary
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.weapon}
-                </div>
-
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Sight
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.sight}
-                </div>
-
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Barrel
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.barrel}
-                </div>
-
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Grip
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.grip}
-                </div>
-
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Secondary
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.secondary}
-                </div>
-
-            </div>
-
-
-            <div class="loadout-section">
-
-                <div class="loadout-label">
-                    Gadget
-                </div>
-
-                <div class="loadout-value">
-                    ${operator.gadget}
-                </div>
-
-            </div>
-
-
-            <span class="pro-badge">
-                PRO LOADOUT
+            <span class="side ${sideClass}">
+                ${operator.side}
             </span>
-
+            <div class="section">
+                <div class="section-title">
+                    Specialties
+                </div>
+                <div class="tags">
+                    ${operator.specialties.map(s =>
+                        `<span class="tag">${s}</span>`
+                    ).join("")}
+                </div>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    Unique Ability
+                </div>
+                <div class="ability">
+                    ${operator.ability}
+                </div>
+                <p class="description">
+                    ${operator.description}
+                </p>
+            </div>
+            <div class="section">
+                <div class="section-title">
+                    Secondary Gadgets
+                </div>
+                ${operator.gadgets.map(g =>
+                    `<div class="gadget">• ${g}</div>`
+                ).join("")}
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <span class="stat-label">
+                        Health
+                    </span>
+                    <span class="stat-value">
+                        ${operator.health}/3
+                    </span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">
+                        Speed
+                    </span>
+                    <span class="stat-value">
+                        ${operator.speed}/3
+                    </span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">
+                        Difficulty
+                    </span>
+                    <span class="stat-value">
+                        ${operator.difficulty}/3
+                    </span>
+                </div>
+            </div>
+        </div>
         `;
-
-        grid.appendChild(card);
-
-    });
-
+    }).join("");
 }
-
-
-/* =========================
-   FILTER
-========================= */
-
-function filterLoadouts(role, button) {
-
-    document
-        .querySelectorAll(
-            "#loadoutGrid .loadout-card"
-        )
-        .forEach(card => {
-
-            if(role === "all") {
-
-                card.style.display = "";
-
-            }
-
-            else if(
-                card.dataset.role === role
-            ) {
-
-                card.style.display = "";
-
-            }
-
-            else {
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-
-    document
-        .querySelectorAll(
-            ".filter button"
-        )
-        .forEach(btn => {
-
-            btn.classList.remove(
-                "selected"
-            );
-
-        });
-
-
-    if(button) {
-
-        button.classList.add(
-            "selected"
-        );
-
-    }
-
-}
-
-
-/* =========================
-   SEARCH
-========================= */
-
-function searchLoadouts() {
-
-    const search =
-        document
-        .getElementById(
-            "loadoutSearch"
-        )
-        .value
-        .toLowerCase();
-
-
-    document
-        .querySelectorAll(
-            "#loadoutGrid .loadout-card"
-        )
-        .forEach(card => {
-
-            const name =
-                card
-                .querySelector(
-                    ".loadout-name"
-                )
-                .textContent
-                .toLowerCase();
-
-
-            if(name.includes(search)) {
-
-                card.style.display = "";
-
-            }
-
-            else {
-
-                card.style.display = "none";
-
-            }
-
-        });
-
-}
-
-
-/* START */
-
-displayLoadouts(loadouts);
-
+renderOperators();
 </script>
+</body>
+</html>
