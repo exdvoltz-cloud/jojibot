@@ -150,4 +150,27 @@ function setInitialPaperHoldings(symbol, quantity) {
   userHoldings[symbol] = quantity;
   updateUI();
 }
+const shareInput = document.getElementById('share-amount-input'); // Replace with your input's ID
+const priceDisplay = document.getElementById('trade-price-display'); // Replace with your price element's ID
+
+const unitPrice = 78.42; // Base price per share
+
+function updateTotalPrice() {
+  const quantity = parseFloat(shareInput.value) || 0;
+  const totalPrice = unitPrice * quantity;
+  
+  // Format as currency
+  priceDisplay.textContent = `$${totalPrice.toLocaleString('en-US', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })}`;
+}
+
+// Recalculate cost automatically whenever user types in the input box
+shareInput.addEventListener('input', updateTotalPrice);
+<!-- Locate the bot label container and update the text -->
+<div class="bot-info">
+  <div class="bot-name">Dino nuggets</div>
+  <div class="bot-subtext">Automated strategy</div>
+</div>
 
