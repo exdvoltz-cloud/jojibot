@@ -150,27 +150,128 @@ function setInitialPaperHoldings(symbol, quantity) {
   userHoldings[symbol] = quantity;
   updateUI();
 }
-const shareInput = document.getElementById('share-amount-input'); // Replace with your input's ID
-const priceDisplay = document.getElementById('trade-price-display'); // Replace with your price element's ID
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trading Interface</title>
+  <style>
+    body {
+      background-color: #0d1117;
+      color: #ffffff;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      display: flex;
+      justify-content: center;
+      padding: 20px;
+    }
+    .card {
+      background-color: #161b22;
+      border: 1px solid #30363d;
+      border-radius: 12px;
+      padding: 20px;
+      width: 320px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    }
+    .title { font-size: 20px; font-weight: bold; margin-bottom: 10px; }
+    .price { font-size: 32px; font-weight: bold; }
+    .change { color: #2ea043; font-size: 14px; margin-bottom: 15px; }
+    label { font-size: 12px; color: #8b949e; display: block; margin-bottom: 5px; }
+    input[type="number"] {
+      width: 100%;
+      padding: 10px;
+      background-color: #0d1117;
+      border: 1px solid #30363d;
+      border-radius: 6px;
+      color: #fff;
+      box-sizing: border-box;
+      margin-bottom: 15px;
+    }
+    .btn-group { display: flex; gap: 10px; margin-bottom: 20px; }
+    button {
+      flex: 1;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-buy { background-color: #238636; color: white; }
+    .btn-sell { background-color: #da3633; color: white; }
+    .bot-section {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-top: 1px solid #30363d;
+      padding-top: 15px;
+    }
+    .bot-name { font-weight: bold; font-size: 16px; }
+    .bot-sub { font-size: 12px; color: #8b949e; }
+  </style>
+</head>
+<body>
 
-const unitPrice = 78.42; // Base price per share
+<div class="card">
+  <div class="title">Trade</div>
+  <div class="price" id="total-price">$78.42</div>
+  <div class="change">+2.31%</div>
 
-function updateTotalPrice() {
-  const quantity = parseFloat(shareInput.value) || 0;
-  const totalPrice = unitPrice * quantity;
-  
-  // Format as currency
-  priceDisplay.textContent = `$${totalPrice.toLocaleString('en-US', {
-    minimumFractionDigits: 2,
-    maximumFractionDigits: 2
-  })}`;
-}
+  <label for="share-input">Shares / Amount</label>
+  <input type="number" id="share-input" value="1" min="1">
 
-// Recalculate cost automatically whenever user types in the input box
-shareInput.addEventListener('input', updateTotalPrice);
-<!-- Locate the bot label container and update the text -->
-<div class="bot-info">
-  <div class="bot-name">Dino nuggets</div>
-  <div class="bot-subtext">Automated strategy</div>
+  <div class="btn-group">
+    <button class="btn-buy" id="buy-btn">BUY</button>
+    <button class="btn-sell" id="sell-btn">SELL</button>
+  </div>
+
+  <div class="bot-section">
+    <div>
+      <div class="bot-name">Dino nuggets</div>
+      <div class="bot-sub">Automated strategy</div>
+    </div>
+    <input type="checkbox" checked>
+  </div>
 </div>
+
+<script>
+  const basePrice = 78.42;
+  let ownedShares = 0; // Tracks owned paper holdings
+
+  const shareInput = document.getElementById('share-input');
+  const priceDisplay = document.getElementById('total-price');
+  const buyBtn = document.getElementById('buy-btn');
+  const sellBtn = document.getElementById('sell-btn');
+
+  // Dynamically calculate price based on share amount
+  shareInput.addEventListener('input', () => {
+    const shares = parseFloat(shareInput.value) || 0;
+    const total = basePrice * shares;
+    priceDisplay.textContent = `$${total.toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+  });
+
+  // Handle Buy Action
+  buyBtn.addEventListener('click', () => {
+    const sharesToBuy = parseFloat(shareInput.value) || 0;
+    if (sharesToBuy > 0) {
+      ownedShares += sharesToBuy;
+      alert(`Successfully bought ${sharesToBuy} share(s)! Total owned: ${ownedShares}`);
+    }
+  });
+
+  // Handle Sell Action
+  sellBtn.addEventListener('click', () => {
+    const sharesToSell = parseFloat(shareInput.value) || 0;
+    if (sharesToSell <= 0) return;
+
+    if (ownedShares >= sharesToSell) {
+      ownedShares -= sharesToSell;
+      alert(`Successfully sold ${sharesToSell} share(s)! Remaining owned: ${ownedShares}`);
+    } else {
+      alert(`You don't have enough paper holdings. You currently own ${ownedShares} share(s).`);
+    }
+  });
+</script>
+
+</body>
+</html>
 
