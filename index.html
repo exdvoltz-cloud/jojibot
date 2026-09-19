@@ -1,523 +1,423 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>R6 Siege Operator Guide</title>
-<style>
-    * {
-        box-sizing: border-box;
-        margin: 0;
-        padding: 0;
-        font-family: Arial, sans-serif;
-    }
-    body {
-        background: #101217;
-        color: white;
-    }
-    header {
-        background: #191c24;
-        padding: 25px;
-        text-align: center;
-        border-bottom: 2px solid #f5c542;
-    }
-    header h1 {
-        font-size: 32px;
-        color: #f5c542;
-    }
-    header p {
-        color: #aaa;
-        margin-top: 8px;
-    }
-    .container {
-        max-width: 1200px;
-        margin: auto;
-        padding: 25px;
-    }
-    .controls {
-        display: flex;
-        gap: 12px;
-        flex-wrap: wrap;
-        margin-bottom: 25px;
-    }
-    select, input {
-        background: #1b1f28;
-        color: white;
-        border: 1px solid #3a3f4b;
-        padding: 13px;
-        border-radius: 7px;
-        font-size: 15px;
-    }
-    select {
-        min-width: 200px;
-    }
-    input {
-        flex: 1;
-        min-width: 200px;
-    }
-    .map-card {
-        background: #191c24;
-        border: 1px solid #303541;
-        border-radius: 12px;
-        padding: 22px;
-        margin-bottom: 25px;
-    }
-    .map-card h2 {
-        color: #f5c542;
-        margin-bottom: 8px;
-    }
-    .site {
-        background: #222631;
-        padding: 15px;
-        margin-top: 12px;
-        border-radius: 8px;
-    }
-    .site h3 {
-        margin-bottom: 8px;
-    }
-    .operators {
-        display: grid;
-        grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-        gap: 15px;
-        margin-top: 12px;
-    }
-    .operator {
-        background: #151820;
-        padding: 17px;
-        border-radius: 8px;
-        border-left: 4px solid #f5c542;
-    }
-    .operator h4 {
-        color: #f5c542;
-        font-size: 19px;
-        margin-bottom: 6px;
-    }
-    .operator p {
-        color: #bbb;
-        line-height: 1.4;
-        font-size: 14px;
-    }
-    .role {
-        display: inline-block;
-        background: #303541;
-        padding: 5px 8px;
-        border-radius: 5px;
-        font-size: 12px;
-        margin-top: 8px;
-        color: #ddd;
-    }
-    footer {
-        text-align: center;
-        padding: 30px;
-        color: #777;
-    }
-    @media(max-width:600px) {
-        header h1 {
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WaterWorld | Waterpark</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            scroll-behavior: smooth;
+            font-family: Arial, sans-serif;
+        }
+        body {
+            background: #eefaff;
+            color: #123;
+        }
+        /* NAVBAR */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(0, 70, 130, 0.95);
+            padding: 18px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+        }
+        .logo {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .logo span {
+            color: #55e6ff;
+        }
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 25px;
+        }
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+        nav a:hover {
+            color: #55e6ff;
+        }
+        /* HERO */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            color: white;
+            padding: 100px 20px 50px;
+            background:
+                linear-gradient(rgba(0, 90, 170, 0.55), rgba(0, 180, 220, 0.5)),
+                url("https://images.unsplash.com/photo-1560089000-7433a4ebbd64?auto=format&fit=crop&w=2000&q=80");
+            background-size: cover;
+            background-position: center;
+        }
+        .hero-content h1 {
+            font-size: 75px;
+            text-shadow: 3px 3px 8px #003b5c;
+        }
+        .hero-content p {
+            font-size: 24px;
+            margin: 20px 0 30px;
+        }
+        .btn {
+            display: inline-block;
+            background: #ffcf33;
+            color: #073b63;
+            padding: 15px 30px;
+            border-radius: 30px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 18px;
+            transition: 0.3s;
+            border: none;
+            cursor: pointer;
+        }
+        .btn:hover {
+            transform: scale(1.08);
+            background: white;
+        }
+        /* SECTIONS */
+        section {
+            padding: 80px 8%;
+        }
+        .section-title {
+            text-align: center;
+            color: #0069a8;
+            font-size: 40px;
+            margin-bottom: 45px;
+        }
+        /* ATTRACTIONS */
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 25px;
+        }
+        .card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.12);
+            transition: 0.3s;
+        }
+        .card:hover {
+            transform: translateY(-10px);
+        }
+        .card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        .card-content {
+            padding: 22px;
+        }
+        .card h3 {
+            color: #0077b6;
+            margin-bottom: 10px;
             font-size: 24px;
         }
-        .container {
-            padding: 15px;
+        .card p {
+            color: #555;
+            line-height: 1.5;
         }
-    }
-</style>
+        /* TICKETS */
+        #tickets {
+            background: #d9f7ff;
+        }
+        .tickets {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+            gap: 25px;
+        }
+        .ticket {
+            background: white;
+            text-align: center;
+            padding: 35px 20px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .ticket h3 {
+            font-size: 25px;
+            color: #0077b6;
+        }
+        .price {
+            font-size: 42px;
+            font-weight: bold;
+            color: #00a8e8;
+            margin: 15px;
+        }
+        .ticket ul {
+            list-style: none;
+            line-height: 2;
+            margin-bottom: 20px;
+        }
+        /* HOURS */
+        .hours {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 30px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .hours-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 15px;
+            border-bottom: 1px solid #ddd;
+        }
+        .hours-row:last-child {
+            border-bottom: none;
+        }
+        /* BOOKING */
+        .booking {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 35px;
+            border-radius: 20px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+        }
+        .booking input,
+        .booking select {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            font-size: 16px;
+        }
+        .booking button {
+            width: 100%;
+            margin-top: 15px;
+        }
+        /* FOOTER */
+        footer {
+            background: #003b63;
+            color: white;
+            text-align: center;
+            padding: 35px;
+        }
+        footer h2 {
+            color: #55e6ff;
+            margin-bottom: 10px;
+        }
+        /* MOBILE */
+        @media (max-width: 700px) {
+            nav {
+                padding: 15px;
+            }
+            nav ul {
+                gap: 10px;
+                font-size: 12px;
+            }
+            .hero-content h1 {
+                font-size: 48px;
+            }
+            .hero-content p {
+                font-size: 18px;
+            }
+        }
+    </style>
 </head>
 <body>
-<header>
-    <h1>R6 SIEGE OPERATOR GUIDE</h1>
-    <p>Map • Site • Operator Recommendations</p>
-</header>
-<div class="container">
-    <div class="controls">
-        <select id="side" onchange="updateGuide()">
-            <option value="all">Attack + Defense</option>
-            <option value="attack">Attackers</option>
-            <option value="defense">Defenders</option>
-        </select>
-        <select id="map" onchange="updateGuide()">
-            <option value="all">All Maps</option>
-            <option value="bank">Bank</option>
-            <option value="border">Border</option>
-            <option value="chalet">Chalet</option>
-            <option value="clubhouse">Clubhouse</option>
-            <option value="consulate">Consulate</option>
-            <option value="kafe">Kafe</option>
-            <option value="lair">Lair</option>
-            <option value="nighthaven">Nighthaven Labs</option>
-            <option value="fortress">Fortress</option>
-            <option value="calypso">Calypso Casino</option>
-            <option value="villa">Villa</option>
-            <option value="oregon">Oregon</option>
-            <option value="coastline">Coastline</option>
-        </select>
-        <input
-            id="search"
-            type="text"
-            placeholder="Search operator or map..."
-            oninput="updateGuide()"
-        >
-    </div>
-    <div id="guide"></div>
-</div>
-<footer>
-    R6 Siege Strategy Guide • Update operator/map data as the game changes
-</footer>
-<script>
-const maps = {
-    bank: {
-        name: "Bank",
-        sites: [
-            {
-                name: "Basement",
-                attack: [
-                    ["Thermite", "Hard Breach / Wall opening"],
-                    ["Ace", "Hard Breach / Pressure"],
-                    ["Buck", "Vertical destruction"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Wall and drone denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Kaid", "Electrification"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    border: {
-        name: "Border",
-        sites: [
-            {
-                name: "Armory / Archives",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Hibana", "Hard Breach"],
-                    ["Ying", "Site pressure"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Information denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"],
-                    ["Wamai", "Projectile interception"]
-                ]
-            }
-        ]
-    },
-    chalet: {
-        name: "Chalet",
-        sites: [
-            {
-                name: "Master Bedroom",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical play"],
-                    ["Twitch", "Gadget destruction"]
-                ],
-                defense: [
-                    ["Kaid", "Wall denial"],
-                    ["Mute", "Gadget denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Wamai", "Projectile interception"]
-                ]
-            }
-        ]
-    },
-    clubhouse: {
-        name: "Clubhouse",
-        sites: [
-            {
-                name: "Church / Arsenal",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Hard Breach"],
-                    ["Buck", "Vertical pressure"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Denial"],
-                    ["Kaid", "Wall denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    consulate: {
-        name: "Consulate",
-        sites: [
-            {
-                name: "Basement",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical destruction"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Drone denial"],
-                    ["Kaid", "Reinforcement denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Wamai", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    kafe: {
-        name: "Kafe",
-        sites: [
-            {
-                name: "Reading / Fireplace",
-                attack: [
-                    ["Buck", "Vertical destruction"],
-                    ["Ace", "Hard Breach"],
-                    ["Dokkaebi", "Intel disruption"],
-                    ["Ying", "Site pressure"]
-                ],
-                defense: [
-                    ["Smoke", "Plant denial"],
-                    ["Mute", "Denial"],
-                    ["Jäger", "Projectile protection"],
-                    ["Wamai", "Projectile interception"]
-                ]
-            }
-        ]
-    },
-    lair: {
-        name: "Lair",
-        sites: [
-            {
-                name: "Main Site",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical pressure"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Information denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"],
-                    ["Kaid", "Reinforcement denial"]
-                ]
-            }
-        ]
-    },
-    nighthaven: {
-        name: "Nighthaven Labs",
-        sites: [
-            {
-                name: "Basement",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Hard Breach"],
-                    ["Buck", "Vertical play"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Denial"],
-                    ["Kaid", "Wall denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    fortress: {
-        name: "Fortress",
-        sites: [
-            {
-                name: "Main Objective",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical destruction"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Kaid", "Wall denial"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    calypso: {
-        name: "Calypso Casino",
-        sites: [
-            {
-                name: "Vault",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical pressure"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Information denial"],
-                    ["Kaid", "Reinforcement denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    villa: {
-        name: "Villa",
-        sites: [
-            {
-                name: "Living Room / Library",
-                attack: [
-                    ["Buck", "Vertical destruction"],
-                    ["Thermite", "Hard Breach"],
-                    ["Dokkaebi", "Intel disruption"],
-                    ["Ying", "Site pressure"]
-                ],
-                defense: [
-                    ["Mute", "Denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"],
-                    ["Kaid", "Wall denial"]
-                ]
-            }
-        ]
-    },
-    oregon: {
-        name: "Oregon",
-        sites: [
-            {
-                name: "Basement",
-                attack: [
-                    ["Thermite", "Hard Breach"],
-                    ["Ace", "Wall opening"],
-                    ["Buck", "Vertical pressure"],
-                    ["Dokkaebi", "Intel disruption"]
-                ],
-                defense: [
-                    ["Mute", "Drone denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Kaid", "Wall denial"],
-                    ["Jäger", "Projectile protection"]
-                ]
-            }
-        ]
-    },
-    coastline: {
-        name: "Coastline",
-        sites: [
-            {
-                name: "Hookah / Billiards",
-                attack: [
-                    ["Dokkaebi", "Intel disruption"],
-                    ["Ying", "Site pressure"],
-                    ["Buck", "Vertical destruction"],
-                    ["Twitch", "Gadget destruction"]
-                ],
-                defense: [
-                    ["Mute", "Denial"],
-                    ["Smoke", "Plant denial"],
-                    ["Jäger", "Projectile protection"],
-                    ["Wamai", "Projectile interception"]
-                ]
-            }
-        ]
-    }
-};
-function createOperator(name, description, side) {
-    return `
-        <div class="operator">
-            <h4>${name}</h4>
-            <p>${description}</p>
-            <span class="role">
-                ${side === "attack" ? "ATTACKER" : "DEFENDER"}
-            </span>
+    <!-- NAVIGATION -->
+    <nav>
+        <div class="logo">Water<span>World</span> 🌊</div>
+        <ul>
+            <li><a href="#home">Home</a></li>
+            <li><a href="#attractions">Rides</a></li>
+            <li><a href="#tickets">Tickets</a></li>
+            <li><a href="#hours">Hours</a></li>
+            <li><a href="#booking">Book</a></li>
+        </ul>
+    </nav>
+    <!-- HERO -->
+    <section class="hero" id="home">
+        <div class="hero-content">
+            <h1>WATERWORLD</h1>
+            <p>Make a splash. Make memories. Have the ultimate water adventure!</p>
+            <a href="#tickets" class="btn">GET TICKETS 🎟️</a>
         </div>
-    `;
-}
-function updateGuide() {
-    const selectedMap =
-        document.getElementById("map").value;
-    const selectedSide =
-        document.getElementById("side").value;
-    const search =
-        document.getElementById("search")
-        .value
-        .toLowerCase();
-    const guide =
-        document.getElementById("guide");
-    guide.innerHTML = "";
-    Object.keys(maps).forEach(key => {
-        if (selectedMap !== "all" && selectedMap !== key)
-            return;
-        const map = maps[key];
-        if (
-            search &&
-            !map.name.toLowerCase().includes(search)
-        )
-            return;
-        let html = `
-            <div class="map-card">
-                <h2>${map.name}</h2>
-        `;
-        map.sites.forEach(site => {
-            html += `
-                <div class="site">
-                    <h3>${site.name}</h3>
-            `;
-            if (
-                selectedSide === "all" ||
-                selectedSide === "attack"
-            ) {
-                html += `
-                    <h4>⚔️ Attackers</h4>
-                    <div class="operators">
-                `;
-                site.attack.forEach(op => {
-                    if (
-                        !search ||
-                        op[0].toLowerCase().includes(search)
-                    ) {
-                        html += createOperator(
-                            op[0],
-                            op[1],
-                            "attack"
-                        );
-                    }
-                });
-                html += `</div>`;
-            }
-            if (
-                selectedSide === "all" ||
-                selectedSide === "defense"
-            ) {
-                html += `
-                    <h4 style="margin-top:20px">
-                        🛡️ Defenders
-                    </h4>
-                    <div class="operators">
-                `;
-                site.defense.forEach(op => {
-                    if (
-                        !search ||
-                        op[0].toLowerCase().includes(search)
-                    ) {
-                        html += createOperator(
-                            op[0],
-                            op[1],
-                            "defense"
-                        );
-                    }
-                });
-                html += `</div>`;
-            }
-            html += `</div>`;
-        });
-        html += `</div>`;
-        guide.innerHTML += html;
-    });
-}
-updateGuide();
-</script>
+    </section>
+    <!-- ATTRACTIONS -->
+    <section id="attractions">
+        <h2 class="section-title">🌊 Our Attractions</h2>
+        <div class="cards">
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1600965962361-9035dbfd1c50?auto=format&fit=crop&w=900&q=80">
+                <div class="card-content">
+                    <h3>🌪️ Tornado Slide</h3>
+                    <p>
+                        Spin, twist and race through one of WaterWorld's
+                        most exciting water slides.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1560089000-7433a4ebbd64?auto=format&fit=crop&w=900&q=80">
+                <div class="card-content">
+                    <h3>🏄 Wave Pool</h3>
+                    <p>
+                        Grab a float and ride massive waves in our
+                        giant tropical wave pool.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1530549387789-4c1017266635?auto=format&fit=crop&w=900&q=80">
+                <div class="card-content">
+                    <h3>🏝️ Lazy River</h3>
+                    <p>
+                        Relax and float through a peaceful tropical
+                        river surrounded by waterfalls.
+                    </p>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1582139329536-e7284fece509?auto=format&fit=crop&w=900&q=80">
+                <div class="card-content">
+                    <h3>💦 Splash Zone</h3>
+                    <p>
+                        A family-friendly area packed with fountains,
+                        buckets and mini slides.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- TICKETS -->
+    <section id="tickets">
+        <h2 class="section-title">🎟️ Tickets</h2>
+        <div class="tickets">
+            <div class="ticket">
+                <h3>Child</h3>
+                <div class="price">$29</div>
+                <ul>
+                    <li>✔ Full-day access</li>
+                    <li>✔ All water attractions</li>
+                    <li>✔ Splash Zone</li>
+                </ul>
+                <a href="#booking" class="btn">BUY NOW</a>
+            </div>
+            <div class="ticket">
+                <h3>Adult</h3>
+                <div class="price">$39</div>
+                <ul>
+                    <li>✔ Full-day access</li>
+                    <li>✔ All water attractions</li>
+                    <li>✔ Wave Pool</li>
+                </ul>
+                <a href="#booking" class="btn">BUY NOW</a>
+            </div>
+            <div class="ticket">
+                <h3>Family</h3>
+                <div class="price">$119</div>
+                <ul>
+                    <li>✔ 2 Adults</li>
+                    <li>✔ 2 Children</li>
+                    <li>✔ Full-day access</li>
+                </ul>
+                <a href="#booking" class="btn">BUY NOW</a>
+            </div>
+        </div>
+    </section>
+    <!-- HOURS -->
+    <section id="hours">
+        <h2 class="section-title">🕒 Park Hours</h2>
+        <div class="hours">
+            <div class="hours-row">
+                <strong>Monday - Thursday</strong>
+                <span>10 AM - 7 PM</span>
+            </div>
+            <div class="hours-row">
+                <strong>Friday</strong>
+                <span>10 AM - 9 PM</span>
+            </div>
+            <div class="hours-row">
+                <strong>Saturday</strong>
+                <span>9 AM - 10 PM</span>
+            </div>
+            <div class="hours-row">
+                <strong>Sunday</strong>
+                <span>9 AM - 8 PM</span>
+            </div>
+        </div>
+    </section>
+    <!-- BOOKING -->
+    <section id="booking">
+        <h2 class="section-title">🎫 Book Your Visit</h2>
+        <div class="booking">
+            <form onsubmit="bookTicket(event)">
+                <input
+                    type="text"
+                    id="name"
+                    placeholder="Full Name"
+                    required
+                >
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="Email Address"
+                    required
+                >
+                <input
+                    type="date"
+                    id="date"
+                    required
+                >
+                <select id="ticketType" required>
+                    <option value="">Select Ticket</option>
+                    <option>Child - $29</option>
+                    <option>Adult - $39</option>
+                    <option>Family - $119</option>
+                </select>
+                <button class="btn" type="submit">
+                    RESERVE TICKETS 🌊
+                </button>
+            </form>
+            <p id="confirmation"
+               style="text-align:center; margin-top:20px; font-weight:bold;">
+            </p>
+        </div>
+    </section>
+    <!-- FOOTER -->
+    <footer>
+        <h2>🌊 WaterWorld</h2>
+        <p>
+            The ultimate destination for summer fun!
+        </p>
+        <br>
+        <p>
+            © 2026 WaterWorld Waterpark
+        </p>
+    </footer>
+    <!-- JAVASCRIPT -->
+    <script>
+        function bookTicket(event) {
+            event.preventDefault();
+            const name = document.getElementById("name").value;
+            const date = document.getElementById("date").value;
+            const ticket = document.getElementById("ticketType").value;
+            document.getElementById("confirmation").innerHTML =
+                "🌊 Thanks, " + name +
+                "! Your " + ticket +
+                " ticket request for " + date +
+                " has been received! 🎉";
+        }
+    </script>
 </body>
 </html>
